@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '../Inputs/Switch/Switch';
-import SignIn from '../SignIn/SignIn';
-import SignUp from '../SignUp/SignUp';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 export default class Auth extends Component {
     state = {

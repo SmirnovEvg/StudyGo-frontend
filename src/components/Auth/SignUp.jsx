@@ -5,11 +5,12 @@ import Button from '../Inputs/Button/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '../Inputs/Switch/Switch';
 
-class SignIn extends Component {
+class SignUp extends Component {
     state = {
         studnumber: '',
         password: '',
-        role: false
+        confirmPassword: '',
+        role : false
     }
 
     handleChange = name => event => {
@@ -20,11 +21,12 @@ class SignIn extends Component {
         this.setState({ ...this.state, [name]: event.target.checked });       
     };
 
-    signIn = async (studnumber, password, role) => {
+    signUp = async (studnumber, password, confirmPassword, role) => {
         try {
-            await axios.post('http://localhost:3333/api/user/login', {
+            await axios.post('http://localhost:3333/api/auth/register', {
                 studnumber: studnumber,
                 password: password,
+                confirmPassword: confirmPassword,
                 role: role ? 1 : 0
             }).then(res => {
                 console.log(res.data.token);
@@ -32,21 +34,12 @@ class SignIn extends Component {
             })
         } catch (error) {
             console.log(error);
-        }
-    }
-
-    signOut = async () => {
-        try {
-            localStorage.removeItem('access_token');
-        }
-        catch (err) {
-            console.log(err);
-
-        }
+            
+        }        
     }
 
     render() {
-        const { studnumber, password, role } = this.state;
+        const{ studnumber, password, confirmPassword, role } = this.state;
         return (
             <div className="App">
                 <form className="" noValidate autoComplete="off">
@@ -70,19 +63,20 @@ class SignIn extends Component {
                         margin="normal"
                         onChange={this.handleChange('password')}
                     />
+                    <TextField
+                        id="standard-confirm-password-input"
+                        label="Подтвердите пароль"
+                        type="password"
+                        autoComplete="current-password"
+                        margin="normal"
+                        onChange={this.handleChange('confirmPassword')}
+                    />
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={() => this.signIn(studnumber, password, role)}
+                        onClick={() => this.signUp(studnumber, password, confirmPassword, role)}
                     >
-                        Войти
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => this.signOut()}
-                    >
-                        Выйти
+                        Зарегистрироваться
                     </Button>
                 </form>
             </div>
@@ -90,4 +84,4 @@ class SignIn extends Component {
     }
 }
 
-export default SignIn;
+export default SignUp;
