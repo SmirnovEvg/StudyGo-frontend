@@ -6,6 +6,10 @@ export default function TeachertProfile(props) {
             Teacher
             <p>{props.studnumber}</p>
             <p>{props.firstName}</p>
+            <p>{props.secondName}</p>
+            <p>{props.thirdName}</p>
+            <p>{props.department}</p>
+            <p>{props.rank}</p>
         </div>
     )
 }

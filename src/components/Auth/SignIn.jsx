@@ -27,12 +27,12 @@ class SignIn extends Component {
                 password: password,
                 role: role ? 1 : 0
             }).then(res => {
-                console.log(res.data.token);
                 localStorage.setItem('access_token', res.data.token);
             })
         } catch (error) {
             console.log(error);
         }
+        console.log(this.state.role);
     }
 
     signOut = async () => {
