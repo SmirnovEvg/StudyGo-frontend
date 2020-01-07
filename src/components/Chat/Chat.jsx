@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import io from "socket.io-client";
 import axios from 'axios';
 
+import DialogList from './DialogList';
+import MessageList from './MessageList';
+
 const socket = io.connect("http://localhost:5000");
 
 class Chat extends Component {
   state = {
     chatMessageText: "",
+    chatMessageUser: "",
     chat: [],
-    chatMessageUser: ""
+    dialogs: [],
   };
 
   componentDidMount = async () => {
@@ -33,23 +37,37 @@ class Chat extends Component {
         console.log(err);
       })
 
+    await axios.get('http://localhost:3333/api/chat/dialog', {
+      params: {
+        userId: this.state.chatMessageUser
+      }
+    }).then(res => {
+      this.setState({
+        dialogs: res.data
+      })
+    })
+
+    await axios.get('http://localhost:3333/api/chat/message', {
+      params: {
+        dialogId: "5e11e6da85a5750ddcda56a9"
+      }
+    }).then(res => {
+      this.setState({
+        chat: res.data
+      })
+    })
+
     socket.on("chat message", ({ chatMessageUser, chatMessageText }) => {
       this.setState({
         chat: [...this.state.chat, { chatMessageUser, chatMessageText }]
       });
     });
-
-    await axios.post('http://localhost:3333/api/chat/getMessages', {
-      dialogId: "5e11e6da85a5750ddcda56a9"
-    }).then(messages => {
-      this.setState({
-        chat: messages.data
-      })
-    })
   }
 
   onTextChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state.dialogs);
+
   };
 
   onMessageSubmit = async () => {
@@ -62,32 +80,23 @@ class Chat extends Component {
       chatMessageText: chatMessageText,
       chatMessageTime: new Date(Date.now()),
       chatMessageUser: chatMessageUser
-    }).then(res => {
-      res.status(200).send("Success")
     })
   };
 
-  renderChat() {
-    const { chat } = this.state;
-    return chat.map(({ chatMessageUser, chatMessageText }, idx) => (
-      <div key={idx}>
-        <span style={{ color: "green" }}>{chatMessageUser}: </span>
-        <span>{chatMessageText}</span>
-      </div>
-    ));
-  }
-
   render() {
+    const { dialogs, chatMessageText, chat } = this.state
     return (
       <div>
+        <span>Dialogs</span>
+        <DialogList dialogs={dialogs} />
         <span>Message</span>
+        <MessageList messages={chat}/>
         <input
           name="chatMessageText"
           onChange={e => this.onTextChange(e)}
-          value={this.state.chatMessageText}
+          value={chatMessageText}
         />
         <button onClick={() => this.onMessageSubmit()}>Send</button>
-        <div>{this.renderChat()}</div>
       </div>
     );
   }
