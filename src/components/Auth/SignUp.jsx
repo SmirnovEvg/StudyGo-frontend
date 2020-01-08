@@ -31,6 +31,7 @@ class SignUp extends Component {
             }).then(res => {
                 console.log(res.data.token);
                 localStorage.setItem('access_token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.student ? res.data.student : res.data.teacher))
             })
         } catch (error) {
             console.log(error);

@@ -28,6 +28,7 @@ class SignIn extends Component {
                 role: role ? 1 : 0
             }).then(res => {
                 localStorage.setItem('access_token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.student ? res.data.student : res.data.teacher))
             })
         } catch (error) {
             console.log(error);
@@ -38,6 +39,7 @@ class SignIn extends Component {
     signOut = async () => {
         try {
             localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
         }
         catch (err) {
             console.log(err);
