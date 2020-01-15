@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+
+import DialogItem from './DialogItem';
+import TextField from '@material-ui/core/TextField';
 
 class DialogList extends Component {
     state = {
         chatMessageUser: "",
+        DialogUserName: "",
         dialogs: [],
     }
     componentDidMount = async () => {
@@ -24,19 +27,42 @@ class DialogList extends Component {
             })
         })
     }
+
+    onTextChange = async e => {
+        this.setState({ [e.target.name]: e.target.value });
+        await axios.get('http://localhost:3333/api/chat/dialog', {
+            params: {
+                userId: this.state.chatMessageUser,
+                dialogUserName: this.state.DialogUserName
+            }
+        }).then(res => {
+            this.setState({
+                dialogs: res.data
+            })
+        })
+    };
+
     renderDialogs = () => {
         return (
             this.state.dialogs.map(item => (
-                <li key={item._id}>
-                    <Link to={`/chat/${item._id}`}>{item._id}</Link>
-                </li>
+                <DialogItem dialog={item} key={item._id} />
             ))
         )
     }
+
     render() {
+        const { DialogUserName } = this.state;
         return (
             <div>
                 <h1>Dialogs</h1>
+                <TextField
+                    id="standard-name"
+                    label="Сообщение"
+                    margin="normal"
+                    name="DialogUserName"
+                    onChange={e => this.onTextChange(e)}
+                    value={DialogUserName}
+                />
                 <ul>
                     {this.renderDialogs()}
                 </ul>

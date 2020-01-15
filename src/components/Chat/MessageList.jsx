@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import io from "socket.io-client";
 import axios from 'axios';
 
+import TextField from '@material-ui/core/TextField';
+import Button from '../Inputs/Button/Button';
+
 const socket = io.connect("http://localhost:5000");
 
 class MessageList extends Component {
@@ -12,11 +15,10 @@ class MessageList extends Component {
     chat: [],
   }
 
-  componentDidUpdate = async() => {
+  componentDidUpdate = async () => {
     let { match: { params } } = this.props;
 
     if (params.dialogId !== this.state.dialogId) {
-
       this.setState({
         dialogId: params.dialogId
       })
@@ -35,6 +37,7 @@ class MessageList extends Component {
       return null;
     }
   }
+
   componentDidMount = async () => {
     const user = await JSON.parse(localStorage.getItem('user'));
     let { match: { params } } = this.props;
@@ -63,8 +66,6 @@ class MessageList extends Component {
 
   onTextChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state.dialogId);
-
   };
 
   onMessageSubmit = async () => {
@@ -98,12 +99,21 @@ class MessageList extends Component {
         <div>
           {this.renderMessages()}
         </div>
-        <input
+        <TextField
+          id="standard-name"
+          label="Сообщение"
+          margin="normal"
           name="chatMessageText"
           onChange={e => this.onTextChange(e)}
           value={chatMessageText}
         />
-        <button onClick={() => this.onMessageSubmit()}>Send</button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => this.onMessageSubmit()}
+        >
+          Отправить
+        </Button>
       </div>
     )
   }
