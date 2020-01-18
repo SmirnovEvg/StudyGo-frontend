@@ -23,19 +23,16 @@ class SignUp extends Component {
 
     signUp = async (studnumber, password, confirmPassword, role) => {
         try {
-            await axios.post('http://localhost:3333/api/auth/register', {
+            const res = await axios.post('http://localhost:3333/api/auth/register', {
                 studnumber: studnumber,
                 password: password,
                 confirmPassword: confirmPassword,
                 role: role ? 1 : 0
-            }).then(res => {
-                console.log(res.data.token);
-                localStorage.setItem('access_token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(res.data.student ? res.data.student : res.data.teacher))
             })
+                localStorage.setItem('access_token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.newUser))
         } catch (error) {
             console.log(error);
-            
         }        
     }
 

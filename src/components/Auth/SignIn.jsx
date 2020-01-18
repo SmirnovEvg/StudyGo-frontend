@@ -17,34 +17,29 @@ class SignIn extends Component {
     }
 
     handleCheck = name => event => {
-        this.setState({ ...this.state, [name]: event.target.checked });       
+        this.setState({ ...this.state, [name]: event.target.checked });
     };
 
     signIn = async (studnumber, password, role) => {
         try {
-            await axios.post('http://localhost:3333/api/auth/login', {
-                studnumber: studnumber,
-                password: password,
-                role: role ? 1 : 0
-            }).then(res => {
-                localStorage.setItem('access_token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(res.data.student ? res.data.student : res.data.teacher))
-            })
+            const res = await axios.post(
+                "http://localhost:3333/api/auth/login",
+                {
+                    studnumber: studnumber,
+                    password: password,
+                    role: role ? 1 : 0
+                }
+            );
+            localStorage.setItem('access_token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(res.data.user));
         } catch (error) {
             console.log(error);
         }
-        console.log(this.state.role);
-    }
+    };
 
-    signOut = async () => {
-        try {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-        }
-        catch (err) {
-            console.log(err);
-
-        }
+    signOut = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
     }
 
     render() {
@@ -82,7 +77,7 @@ class SignIn extends Component {
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={() => this.signOut()}
+                        onClick={this.signOut}
                     >
                         Выйти
                     </Button>

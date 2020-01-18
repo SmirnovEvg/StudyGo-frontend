@@ -16,24 +16,22 @@ class MessageList extends Component {
   }
 
   componentDidUpdate = async () => {
-    let { match: { params } } = this.props;
+    const { match: { params } } = this.props;
 
     if (params.dialogId !== this.state.dialogId) {
       this.setState({
         dialogId: params.dialogId
       })
 
-      await axios.get('http://localhost:3333/api/chat/message', {
+      const res = await axios.get('http://localhost:3333/api/chat/message', {
         params: {
           dialogId: params.dialogId
         }
-      }).then(res => {
-        this.setState({
-          chat: res.data
-        })
       })
-    }
-    else {
+      this.setState({
+        chat: res.data
+      })
+    } else {
       return null;
     }
   }
@@ -43,18 +41,17 @@ class MessageList extends Component {
     let { match: { params } } = this.props;
 
     this.setState({
-      chatMessageUser: user.userId,
+      chatMessageUser: user._id,
       dialogId: params.dialogId
     })
 
-    await axios.get('http://localhost:3333/api/chat/message', {
+    const res = await axios.get('http://localhost:3333/api/chat/message', {
       params: {
         dialogId: params.dialogId
       }
-    }).then(res => {
-      this.setState({
-        chat: res.data
-      })
+    })
+    this.setState({
+      chat: res.data
     })
 
     socket.on("chat message", ({ chatMessageUser, chatMessageText }) => {
@@ -110,7 +107,7 @@ class MessageList extends Component {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => this.onMessageSubmit()}
+          onClick={this.onMessageSubmit}
         >
           Отправить
         </Button>

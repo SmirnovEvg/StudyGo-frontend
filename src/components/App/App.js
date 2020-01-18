@@ -1,10 +1,20 @@
 import React from 'react';
-import Main from '../Main/Main';
+import { Switch, Route } from 'react-router-dom';
+
+import Auth from '../Auth/Auth';
+import Post from '../Post/Post';
+import Profile from '../Profile/Profile';
+import Chat from '../Chat/Chat';
 
 const App = () => (
-  <div>
-    <Main />
-  </div>
-);
+  <main>
+    <Switch>
+      <Route exact path='/post' component={Post} />
+      <Route exact path='/auth' component={Auth} />
+      <Route exact path='/profile' component={Profile} />
+      <Route exact path='/chat' component={Chat} />
+    </Switch>
+  </main>
+)
 
 export default App;

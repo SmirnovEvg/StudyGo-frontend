@@ -18,59 +18,51 @@ class Profile extends Component {
         rank: '',
     }
     componentDidMount = async () => {
-        const token = localStorage.getItem("access_token")
-        await axios.get('http://localhost:3333/api/user', {
-            headers: {
-                Authorization: token
-            }
-        }
-        ).then(res => {
-            if (res.data.student !== undefined) {
+        try {
+            const token = localStorage.getItem("access_token");
+            const user = JSON.parse(localStorage.getItem("user"));
+
+            const res = await axios.get('http://localhost:3333/api/user', {
+                headers: {
+                    Authorization: token
+                }
+            })
+            res.data.student ?
                 this.setState({
-                    studnumber: res.data.student.userId.studnumber,
-                    role: res.data.student.userId.role,
-                    firstName: res.data.student.firstName,
-                    secondName: res.data.student.secondName,
+                    studnumber: user.studnumber,
+                    role: user.role,
+                    firstName: user.firstName,
+                    secondName: user.secondName,
+                    thirdName: user.thirdName,
                     course: res.data.student.course,
                     group: res.data.student.group
                 })
-            } else {
+                :
                 this.setState({
-                    studnumber: res.data.teacher.userId.studnumber,
-                    role: res.data.teacher.userId.role,
-                    firstName: res.data.teacher.firstName,
-                    secondName: res.data.teacher.secondName,
-                    thirdName: res.data.teacher.thirdName,
+                    studnumber: user.studnumber,
+                    role: user.role,
+                    firstName: user.firstName,
+                    secondName: user.secondName,
+                    thirdName: user.thirdName,
                     department: res.data.teacher.department,
                     rank: res.data.teacher.rank
                 })
-            }
-        })
-            .catch(err => {
-                console.log(err);
-            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     render() {
-        const { studnumber, firstName, secondName, thirdName, role, course, group, department, rank } = this.state;
+        const { role } = this.state;
         return (
             <div>
                 {role ? (
                     <TeacherProfile
-                        studnumber={studnumber}
-                        firstName={firstName}
-                        secondName={secondName}
-                        thirdName={thirdName}
-                        department={department}
-                        rank={rank}
+                        {...this.state}
                     />
                 ) : (
-                        <StudentProfile 
-                        studnumber={studnumber} 
-                        firstName={firstName} 
-                        secondName={secondName} 
-                        course={course} 
-                        group={group}                         
+                        <StudentProfile
+                            {...this.state}
                         />
                     )}
             </div>
