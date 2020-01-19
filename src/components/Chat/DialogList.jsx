@@ -32,35 +32,34 @@ class DialogList extends Component {
     onTextChange = async e => {
         await this.setState({ [e.target.name]: e.target.value });
 
-        let result = []
-        if (this.state.dialogUserName.length !== 0) {
-            this.state.dialogs.find(dialog => {
-                dialog.users.find(user => {
-                    if ((user._id !== this.state.chatMessageUser) &&
-                        (user.firstName.toLowerCase().includes(this.state.dialogUserName.toLowerCase())
-                            || user.secondName.toLowerCase().includes(this.state.dialogUserName.toLowerCase()))) {
-                        result.push(dialog);
-                    }
-                })
-            })
-        }
-        console.log(result);
-        this.setState({ searchDialogs: result ? result : this.state.dialogs });
+        const result = this.state.dialogs.filter(dialog => {
+            return dialog.user.firstName.toLowerCase().includes(this.state.dialogUserName.toLowerCase()) || dialog.user.secondName.toLowerCase().includes(this.state.dialogUserName.toLowerCase())
+        })
+
+        this.setState({ searchDialogs: result });
     };
 
     renderDialogs = () => {
+        const { searchDialogs, dialogUserName, dialogs } = this.state
+        let dialogList;
+        if (searchDialogs.length) {
+            dialogList = this.state.searchDialogs.map(item => (
+                <DialogItem dialog={item} key={item.id} />
+            ))
+        }
+        else if (dialogUserName && !searchDialogs.length) {
+            dialogList = <li>not found</li>
+        }
+        else {
+            dialogList = dialogs.map(item => (
+                <DialogItem dialog={item} key={item.id} />
+            ))
+        }
         return (
-            this.state.searchDialogs.length ? (
-                this.state.searchDialogs.map(item => (
-                    <DialogItem dialog={item} key={item._id} />
-                ))
-            ) : (
-                    this.state.dialogs.map(item => (
-                        <DialogItem dialog={item} key={item._id} />
-                    ))
-                )
+            <>
+                {dialogList}
+            </>
         )
-        // если массив пуст но в поле введено
     }
 
     render() {
