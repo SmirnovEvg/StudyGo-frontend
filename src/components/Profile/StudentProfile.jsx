@@ -7,6 +7,7 @@ export default function StudentProfile(props) {
             <p>{props.studnumber}</p>
             <p>{props.firstName}</p>
             <p>{props.secondName}</p>
+            <p>{props.thirdName}</p>
             <p>{props.course}</p>
             <p>{props.group}</p>
         </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import userIsAuthenticatedRedirect from '../../wrappers/userIsAuthenticatedRedirect';
+import AuthService from '../../services/AuthService';
 
 import StudentProfile from './StudentProfile';
 import TeacherProfile from './TeacherProfile';
@@ -19,8 +20,8 @@ class Profile extends Component {
     }
     componentDidMount = async () => {
         try {
-            const token = localStorage.getItem("access_token");
-            const user = JSON.parse(localStorage.getItem("user"));
+            const token = AuthService.getToken();
+            const user = AuthService.getUser();
 
             const res = await axios.get('http://localhost:3333/api/user', {
                 headers: {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import AuthService from '../../services/AuthService';
 
 class Post extends Component {
     state = {
@@ -7,7 +8,7 @@ class Post extends Component {
         isLoggined: false
     }
     componentDidMount = () => {
-        const token = localStorage.getItem("access_token")
+        const token = AuthService.getToken();
         axios.get('http://localhost:3333/api/user', {
             headers: {
                 Authorization: token

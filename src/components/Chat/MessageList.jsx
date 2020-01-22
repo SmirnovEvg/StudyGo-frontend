@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from "socket.io-client";
 import axios from 'axios';
-
+import AuthService from '../../services/AuthService';
 import TextField from '@material-ui/core/TextField';
 import Button from '../Inputs/Button/Button';
 
@@ -12,37 +12,27 @@ class MessageList extends Component {
     dialogId: "",
     chatMessageText: "",
     chatMessageUser: "",
+    conversationPartnierName: "",
     chat: [],
   }
 
-  componentDidUpdate = async () => {
-    const { match: { params } } = this.props;
-
-    if (params.dialogId !== this.state.dialogId) {
-      this.setState({
-        dialogId: params.dialogId
-      })
-
-      const res = await axios.get('http://localhost:3333/api/chat/message', {
-        params: {
-          dialogId: params.dialogId
-        }
-      })
-      this.setState({
-        chat: res.data
-      })
-    } else {
-      return null;
-    }
-  }
-
   componentDidMount = async () => {
-    const user = await JSON.parse(localStorage.getItem('user'));
+    const user = await AuthService.getUser();
+
     let { match: { params } } = this.props;
+
+    const partnier = await axios.get('http://localhost:3333/api/chat/partnier', {
+      params: {
+        userId: user._id,
+        dialogId: params.dialogId
+      }
+    })
 
     this.setState({
       chatMessageUser: user._id,
-      dialogId: params.dialogId
+      dialogId: params.dialogId,
+      conversationPartnierName: `${partnier.data.firstName} ${partnier.data.secondName}`,
+      conversationPartnierId: partnier.data._id
     })
 
     const res = await axios.get('http://localhost:3333/api/chat/message', {
@@ -59,6 +49,36 @@ class MessageList extends Component {
         chat: [...this.state.chat, { chatMessageUser, chatMessageText }]
       });
     });
+  }
+
+  componentDidUpdate = async () => {
+    const { match: { params } } = this.props;
+
+    const partnier = await axios.get('http://localhost:3333/api/chat/partnier', {
+      params: {
+        userId: this.state.chatMessageUser,
+        dialogId: params.dialogId
+      }
+    })
+
+    if (params.dialogId !== this.state.dialogId) {
+      this.setState({
+        dialogId: params.dialogId,
+        conversationPartnierName: `${partnier.data.firstName} ${partnier.data.secondName}`,
+        conversationPartnierId: partnier.data._id
+      })
+
+      const res = await axios.get('http://localhost:3333/api/chat/message', {
+        params: {
+          dialogId: params.dialogId
+        }
+      })
+      this.setState({
+        chat: res.data
+      })
+    } else {
+      return null;
+    }
   }
 
   onTextChange = e => {
@@ -89,10 +109,10 @@ class MessageList extends Component {
     )
   }
   render() {
-    const { chatMessageText } = this.state
+    const { chatMessageText, conversationPartnierName, conversationPartnierId } = this.state
     return (
       <div>
-        <h1>Messages</h1>
+        <h1>{conversationPartnierName}</h1>
         <div>
           {this.renderMessages()}
         </div>

@@ -4,13 +4,14 @@ import TextField from '@material-ui/core/TextField';
 import Button from '../Inputs/Button/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '../Inputs/Switch/Switch';
+import AuthService from '../../services/AuthService';
 
 class SignUp extends Component {
     state = {
         studnumber: '',
         password: '',
         confirmPassword: '',
-        role : false
+        role: false
     }
 
     handleChange = name => event => {
@@ -18,7 +19,7 @@ class SignUp extends Component {
     }
 
     handleCheck = name => event => {
-        this.setState({ ...this.state, [name]: event.target.checked });       
+        this.setState({ ...this.state, [name]: event.target.checked });
     };
 
     signUp = async (studnumber, password, confirmPassword, role) => {
@@ -29,15 +30,14 @@ class SignUp extends Component {
                 confirmPassword: confirmPassword,
                 role: role ? 1 : 0
             })
-                localStorage.setItem('access_token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(res.data.newUser))
+            AuthService.setTokenUser(res.data.token, res.data.newUser);
         } catch (error) {
             console.log(error);
-        }        
+        }
     }
 
     render() {
-        const{ studnumber, password, confirmPassword, role } = this.state;
+        const { studnumber, password, confirmPassword, role } = this.state;
         return (
             <div className="App">
                 <form className="" noValidate autoComplete="off">

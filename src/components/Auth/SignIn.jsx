@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '../Inputs/Button/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '../Inputs/Switch/Switch';
+import AuthService from '../../services/AuthService';
 
 class SignIn extends Component {
     state = {
@@ -29,17 +30,15 @@ class SignIn extends Component {
                     password: password,
                     role: role ? 1 : 0
                 }
-            );
-            localStorage.setItem('access_token', res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
+            );            
+            AuthService.setTokenUser(res.data.token, res.data.authUser);
         } catch (error) {
             console.log(error);
         }
     };
 
     signOut = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('user');
+        AuthService.removeTokenUser();
     }
 
     render() {

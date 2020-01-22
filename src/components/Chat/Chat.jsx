@@ -4,11 +4,12 @@ import {
     Switch,
     Route
 } from 'react-router-dom';
+import userIsAuthenticatedRedirect from '../../wrappers/userIsAuthenticatedRedirect';
 
 import DialogList from './DialogList';
 import MessageList from './MessageList';
 
-export default function Chat() {
+function Chat() {
     return (
         <Router>
             <div>
@@ -27,3 +28,5 @@ const ChatDefault = () => (
         <h2>chat</h2>
     </div>
 )
+
+export default userIsAuthenticatedRedirect(Chat);

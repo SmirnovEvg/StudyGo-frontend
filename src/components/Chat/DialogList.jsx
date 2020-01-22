@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import AuthService from '../../services/AuthService';
 
 import DialogItem from './DialogItem';
 import TextField from '@material-ui/core/TextField';
@@ -12,7 +13,7 @@ class DialogList extends Component {
         searchDialogs: []
     }
     componentDidMount = async () => {
-        const user = await JSON.parse(localStorage.getItem('user'));
+        const user = await AuthService.getUser();
 
         this.setState({
             chatMessageUser: user._id
