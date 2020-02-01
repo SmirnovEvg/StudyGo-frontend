@@ -3,6 +3,7 @@ import axios from 'axios';
 import AuthService from '../../services/AuthService';
 
 import DialogItem from './DialogItem';
+import SearchDialogItem from './SearchDialogItem';
 import TextField from '@material-ui/core/TextField';
 
 class DialogList extends Component {
@@ -10,9 +11,12 @@ class DialogList extends Component {
         chatMessageUser: "",
         dialogUserName: "",
         dialogs: [],
-        searchDialogs: []
+        searchDialogs: [],
+        partners: [],
+        searchStudents: [],
+        searchTeachers: []
     }
-    componentDidMount = async () => {
+    componentDidMount = async () => {        
         const user = await AuthService.getUser();
 
         this.setState({
@@ -25,8 +29,11 @@ class DialogList extends Component {
             }
         })
 
+        res.data.partnerIds.push({ id: user._id })
+
         this.setState({
-            dialogs: res.data
+            dialogs: res.data.dialog,
+            partners: res.data.partnerIds
         })
     }
 
@@ -37,19 +44,41 @@ class DialogList extends Component {
             return dialog.user.firstName.toLowerCase().includes(this.state.dialogUserName.toLowerCase()) || dialog.user.secondName.toLowerCase().includes(this.state.dialogUserName.toLowerCase())
         })
 
-        this.setState({ searchDialogs: result });
+        if (this.state.dialogUserName) {
+            const res = await axios.get('http://localhost:3333/api/chat/users', {
+                params: {
+                    searchText: this.state.dialogUserName,
+                    partners: this.state.partners
+                }
+            })
+            this.setState({
+                searchStudents: res.data.searchStudentList,
+                searchTeachers: res.data.searchTeacherList,
+            });
+        }
+        else {
+            this.setState({
+                searchStudents: [],
+                searchTeachers: []
+            });
+        }
+
+        this.setState({
+            searchDialogs: result,
+        });
     };
 
     renderDialogs = () => {
         const { searchDialogs, dialogUserName, dialogs } = this.state
         let dialogList;
+
         if (searchDialogs.length) {
-            dialogList = this.state.searchDialogs.map(item => (
+            dialogList = searchDialogs.map(item => (
                 <DialogItem dialog={item} key={item.id} />
-            ))
+            ));
         }
         else if (dialogUserName && !searchDialogs.length) {
-            dialogList = <li>not found</li>
+            dialogList = <></>
         }
         else {
             dialogList = dialogs.map(item => (
@@ -63,8 +92,36 @@ class DialogList extends Component {
         )
     }
 
+    renderSearchList = () => {
+        const { searchStudents, searchTeachers } = this.state
+        return (
+            <>
+                {searchTeachers.length ?
+                    <>
+                        <li>Преподаватели</li>
+                        {searchTeachers.map(item => (
+                            <SearchDialogItem dialog={item} key={item._id} />
+                        ))}
+                    </>
+                    :
+                    <></>
+                }
+                {searchStudents.length ?
+                    <>
+                        <li>Студенты</li>
+                        {searchStudents.map(item => (
+                            <SearchDialogItem dialog={item} key={item._id} />
+                        ))}
+                    </>
+                    :
+                    <></>
+                }
+            </>
+        )
+    }
+
     render() {
-        const { dialogUserName } = this.state;
+        const { dialogUserName, searchDialogs, searchStudents, searchTeachers } = this.state;
         return (
             <div>
                 <h1>Dialogs</h1>
@@ -78,6 +135,12 @@ class DialogList extends Component {
                 />
                 <ul>
                     {this.renderDialogs()}
+                    {this.renderSearchList()}
+                    {!searchDialogs.length && !searchStudents.length && !searchTeachers.length && dialogUserName ?
+                        <li>Не найдено</li>
+                        :
+                        <></>
+                    }
                 </ul>
             </div>
         )

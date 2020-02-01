@@ -1,32 +1,28 @@
 import React from 'react'
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route
+    Switch
 } from 'react-router-dom';
 import userIsAuthenticatedRedirect from '../../wrappers/userIsAuthenticatedRedirect';
 
 import DialogList from './DialogList';
-import MessageList from './MessageList';
+import RouteWithSubRoutes from '../RouteWithSubRoutes/RouteWithSubRoutes';
+import { routes } from '../App/App';
 
 function Chat() {
+    const chatRoutes = routes.filter(item => {
+        return item.path === '/chat'
+    })
+
     return (
-        <Router>
-            <div>
-                <DialogList />
-                <Switch>
-                    <Route path="/chat" exact component={ChatDefault} />
-                    <Route path="/chat/:dialogId" component={MessageList} />
-                </Switch>
-            </div>
-        </Router>
+        <div>
+            <DialogList />
+            <Switch>
+                {chatRoutes[0].routes.map((route, i) => (
+                    <RouteWithSubRoutes key={i} {...route} />
+                ))}
+            </Switch>
+        </div>
     )
 }
-
-const ChatDefault = () => (
-    <div>
-        <h2>chat</h2>
-    </div>
-)
 
 export default userIsAuthenticatedRedirect(Chat);

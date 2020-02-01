@@ -4,6 +4,7 @@ import axios from 'axios';
 import AuthService from '../../services/AuthService';
 import TextField from '@material-ui/core/TextField';
 import Button from '../Inputs/Button/Button';
+import { Link } from 'react-router-dom';
 
 const socket = io.connect("http://localhost:5000");
 
@@ -12,16 +13,16 @@ class MessageList extends Component {
     dialogId: "",
     chatMessageText: "",
     chatMessageUser: "",
-    conversationPartnierName: "",
+    conversationPartnerName: "",
     chat: [],
   }
 
-  componentDidMount = async () => {
+  componentDidMount = async () => {    
     const user = await AuthService.getUser();
 
     let { match: { params } } = this.props;
 
-    const partnier = await axios.get('http://localhost:3333/api/chat/partnier', {
+    const partner = await axios.get('http://localhost:3333/api/chat/partner', {
       params: {
         userId: user._id,
         dialogId: params.dialogId
@@ -31,8 +32,8 @@ class MessageList extends Component {
     this.setState({
       chatMessageUser: user._id,
       dialogId: params.dialogId,
-      conversationPartnierName: `${partnier.data.firstName} ${partnier.data.secondName}`,
-      conversationPartnierId: partnier.data._id
+      conversationPartnerName: `${partner.data.firstName} ${partner.data.secondName}`,
+      conversationPartnerId: partner.data._id
     })
 
     const res = await axios.get('http://localhost:3333/api/chat/message', {
@@ -54,18 +55,18 @@ class MessageList extends Component {
   componentDidUpdate = async () => {
     const { match: { params } } = this.props;
 
-    const partnier = await axios.get('http://localhost:3333/api/chat/partnier', {
-      params: {
-        userId: this.state.chatMessageUser,
-        dialogId: params.dialogId
-      }
-    })
-
     if (params.dialogId !== this.state.dialogId) {
+      const partner = await axios.get('http://localhost:3333/api/chat/partner', {
+        params: {
+          userId: this.state.chatMessageUser,
+          dialogId: params.dialogId
+        }
+      })
+
       this.setState({
         dialogId: params.dialogId,
-        conversationPartnierName: `${partnier.data.firstName} ${partnier.data.secondName}`,
-        conversationPartnierId: partnier.data._id
+        conversationPartnerName: `${partner.data.secondName} ${partner.data.firstName}`,
+        conversationPartnerId: partner.data._id
       })
 
       const res = await axios.get('http://localhost:3333/api/chat/message', {
@@ -76,8 +77,6 @@ class MessageList extends Component {
       this.setState({
         chat: res.data
       })
-    } else {
-      return null;
     }
   }
 
@@ -108,11 +107,12 @@ class MessageList extends Component {
       ))
     )
   }
+
   render() {
-    const { chatMessageText, conversationPartnierName, conversationPartnierId } = this.state
+    const { chatMessageText, conversationPartnerName, conversationPartnerId } = this.state
     return (
       <div>
-        <h1>{conversationPartnierName}</h1>
+        <Link to={`/profile/${conversationPartnerId}`} >{conversationPartnerName}</Link>
         <div>
           {this.renderMessages()}
         </div>
