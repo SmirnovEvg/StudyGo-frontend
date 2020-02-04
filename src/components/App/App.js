@@ -12,6 +12,7 @@ import MessageList from '../Chat/CreateDialog';
 import CreateDialog from '../Chat/MessageList';
 import RouteWithSubRoutes from '../RouteWithSubRoutes/RouteWithSubRoutes';
 import Chat from '../Chat/Chat';
+import Timetable from '../Timetable/Timetable';
 
 export const routes = [
     {
@@ -21,6 +22,10 @@ export const routes = [
     {
         path: "/auth",
         component: Auth
+    },
+    {
+        path: "/timetable",
+        component: Timetable
     },
     {
         exact: true,

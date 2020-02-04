@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
+import { PropTypes } from 'prop-types';
 
-export default function TeachertProfile(props) {
+export default function UserTeachertProfile(props) {
     return (
         <div>
             Teacher
-            <p>{props.studnumber}</p>
             <p>{props.firstName}</p>
             <p>{props.secondName}</p>
             <p>{props.thirdName}</p>
@@ -12,4 +12,12 @@ export default function TeachertProfile(props) {
             <p>{props.rank}</p>
         </div>
     )
+}
+
+UserTeachertProfile.propTypes = {
+    firstName: PropTypes.string.isRequired,
+    secondName: PropTypes.string.isRequired,
+    thirdName: PropTypes.string.isRequired,
+    department: PropTypes.string.isRequired,
+    rank: PropTypes.string.isRequired
 }

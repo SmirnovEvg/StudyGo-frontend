@@ -2,7 +2,7 @@ import React from 'react'
 import {
     Switch
 } from 'react-router-dom';
-import userIsAuthenticatedRedirect from '../../wrappers/userIsAuthenticatedRedirect';
+import userIsAuthenticatedRedirect from '../wrappers/userIsAuthenticatedRedirect';
 
 import DialogList from './DialogList';
 import RouteWithSubRoutes from '../RouteWithSubRoutes/RouteWithSubRoutes';

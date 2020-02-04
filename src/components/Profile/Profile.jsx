@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import userIsAuthenticatedRedirect from '../../wrappers/userIsAuthenticatedRedirect';
+import userIsAuthenticatedRedirect from '../wrappers/userIsAuthenticatedRedirect';
 import AuthService from '../../services/AuthService';
 
 import StudentProfile from './StudentProfile';

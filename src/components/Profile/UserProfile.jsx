@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import userIsAuthenticatedRedirect from '../../wrappers/userIsAuthenticatedRedirect';
+import userIsAuthenticatedRedirect from '../wrappers/userIsAuthenticatedRedirect';
 
 import UserStudentProfile from './UserStudentProfile';
 import UserTeacherProfile from './UserTeacherProfile';

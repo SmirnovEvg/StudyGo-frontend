@@ -1,5 +1,5 @@
 import React from 'react';
-import Unauthenticated from '../components/Unauthenticated/Unauthenticated';
+import Unauthenticated from '../Unauthenticated/Unauthenticated';
 
 function userIsAuthenticatedRedirect (Component) {
     return class extends React.Component {
