@@ -30,7 +30,9 @@ class SignUp extends Component {
                 confirmPassword: confirmPassword,
                 role: role ? 1 : 0
             })
-            AuthService.setTokenUser(res.data.token, res.data.newUser);
+            console.log(res.data);
+            
+            AuthService.setTokenUser(res.data.token, res.data.user);
         } catch (error) {
             console.log(error);
         }

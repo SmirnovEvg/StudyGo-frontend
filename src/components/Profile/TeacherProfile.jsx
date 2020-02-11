@@ -2,9 +2,6 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 
 export default function TeachertProfile(props) {
-    console.log(typeof (props.studnumber));
-    console.log(typeof (props.course));
-    console.log(typeof (props.group));
     return (
         <div>
             Teacher

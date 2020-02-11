@@ -2,10 +2,6 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 
 export default function StudentProfile(props) {
-    console.log(typeof (props.studnumber));
-    console.log(typeof (props.course));
-    console.log(typeof (props.group));
-
     return (
         <div>
             Student
@@ -15,6 +11,7 @@ export default function StudentProfile(props) {
             <p>{props.thirdName}</p>
             <p>{props.course}</p>
             <p>{props.group}</p>
+            <p>{props.groupPart}</p>
         </div>
     )
 }
@@ -43,5 +40,9 @@ StudentProfile.propTypes = {
     group: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.number.isRequired
-    ])
+    ]),
+    groupPart: PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.number.isRequired
+    ]),
 }

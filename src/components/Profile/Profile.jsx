@@ -15,6 +15,7 @@ class Profile extends Component {
         role: '',
         course: '',
         group: '',
+        groupPart: '',
         department: '',
         rank: '',
     }
@@ -28,26 +29,36 @@ class Profile extends Component {
                     Authorization: token
                 }
             })
-            res.data.student ?
-                this.setState({
-                    studnumber: user.studnumber,
-                    role: user.role,
-                    firstName: user.firstName,
-                    secondName: user.secondName,
-                    thirdName: user.thirdName,
-                    course: res.data.student.course,
-                    group: res.data.student.group
-                })
-                :
-                this.setState({
-                    studnumber: user.studnumber,
-                    role: user.role,
-                    firstName: user.firstName,
-                    secondName: user.secondName,
-                    thirdName: user.thirdName,
-                    department: res.data.teacher.department,
-                    rank: res.data.teacher.rank
-                })
+            console.log(res.data);
+            switch (res.data.userId.role) {
+                case 0:
+                    this.setState({
+                        studnumber: user.studnumber,
+                        role: user.role,
+                        firstName: user.firstName,
+                        secondName: user.secondName,
+                        thirdName: user.thirdName,
+                        course: res.data.course,
+                        group: res.data.group,
+                        groupPart: res.data.groupPart,
+                    })
+                    break;
+
+                case 1:
+                    this.setState({
+                        studnumber: user.studnumber,
+                        role: user.role,
+                        firstName: user.firstName,
+                        secondName: user.secondName,
+                        thirdName: user.thirdName,
+                        department: res.data.teacher.department,
+                        rank: res.data.teacher.rank
+                    })
+                    break;
+
+                default:
+                    break;
+            }
         } catch (error) {
             console.log(error);
         }
