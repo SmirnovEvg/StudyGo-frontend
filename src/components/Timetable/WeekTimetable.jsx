@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import DayTimetable from './DayTimetable';
-// import { PropTypes } from 'prop-types';
+import { PropTypes } from 'prop-types';
 
 export default class WeekTimetable extends Component {
     renderDays = () => {
-        return Object.values(this.props.week).map((item, index) => (
-            <DayTimetable day={item} weekDay={index} />
+        const { week } = this.props;
+
+        return Object.values(week).map((item, index) => (
+            <DayTimetable key={index} day={item} weekDay={index} />
         ))
     }
 
@@ -21,5 +23,8 @@ export default class WeekTimetable extends Component {
 }
 
 WeekTimetable.propTypes = {
-
+    week: PropTypes.oneOfType([
+        PropTypes.object.isRequired,
+        PropTypes.array.isRequired
+    ])
 }

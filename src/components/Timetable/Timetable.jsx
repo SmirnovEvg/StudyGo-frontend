@@ -5,9 +5,10 @@ import AuthService from '../../services/AuthService';
 import Radio from '../Inputs/Radio/Radio';
 import WeekTimetable from './WeekTimetable';
 import TimetableService from '../../services/TimetableService';
+import userIsAuthenticatedRedirect from '../wrappers/userIsAuthenticatedRedirect';
 
 
-export default class Timetable extends Component {
+class Timetable extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,6 +20,7 @@ export default class Timetable extends Component {
 
     componentDidMount = async () => {
         const token = AuthService.getToken();
+        
         const user = await axios.get('http://localhost:3333/api/user', {
             headers: {
                 Authorization: token
@@ -67,3 +69,5 @@ export default class Timetable extends Component {
         )
     }
 }
+
+export default userIsAuthenticatedRedirect(Timetable)
