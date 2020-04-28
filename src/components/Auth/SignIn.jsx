@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import TextField from '@material-ui/core/TextField';
 import Button from '../Inputs/Button/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '../Inputs/Switch/Switch';
 import AuthService from '../../services/AuthService';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 class SignIn extends Component {
     state = {
@@ -14,7 +14,7 @@ class SignIn extends Component {
     }
 
     handleChange = name => event => {
-        this.setState({ [name]: event.target.value })
+        this.setState({ [name]: event.target.value.trim() })
     }
 
     handleCheck = name => event => {
@@ -30,7 +30,7 @@ class SignIn extends Component {
                     password: password,
                     role: role ? 1 : 0
                 }
-            );            
+            );
             AuthService.setTokenUser(res.data.token, res.data.authUser);
         } catch (error) {
             console.log(error);
@@ -45,31 +45,41 @@ class SignIn extends Component {
         const { studnumber, password, role } = this.state;
         return (
             <div className="App">
-                <form className="" noValidate autoComplete="off">
+                <ValidatorForm
+                    ref="form"
+                    onSubmit={() => this.signIn(studnumber, password, role)}
+                    onError={errors => console.log(errors)}
+                >
                     <FormControlLabel
                         control={
                             <Switch checked={role} onChange={this.handleCheck('role')} value="role" />
                         }
-                        label="Роль"
+                        label={role ? 'Преподаватель' : 'Студент'}
                     />
-                    <TextField
+                    <TextValidator
                         id="standard-name"
                         label="Студенческий"
                         onChange={this.handleChange('studnumber')}
                         margin="normal"
+                        value={studnumber}
+                        validators={['required', 'isNumber', 'minNumber: 10000000', 'maxNumber: 99999999']}
+                        errorMessages={['Это поле обязательно', 'Некорректное число', 'Некорректное число', 'Некорректное число']}
                     />
-                    <TextField
+                    <TextValidator
                         id="standard-password-input"
                         label="Пароль"
                         type="password"
                         autoComplete="current-password"
                         margin="normal"
+                        value={password}
                         onChange={this.handleChange('password')}
+                        validators={['required', 'minStringLength: 6']}
+                        errorMessages={['Это поле обязательно', 'Пароль слишком мал']}
                     />
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={() => this.signIn(studnumber, password, role)}
+                        type="submit"
                     >
                         Войти
                     </Button>
@@ -80,7 +90,7 @@ class SignIn extends Component {
                     >
                         Выйти
                     </Button>
-                </form>
+                </ValidatorForm>
             </div>
         );
     }

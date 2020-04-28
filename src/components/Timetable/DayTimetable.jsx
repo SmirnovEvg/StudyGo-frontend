@@ -1,3 +1,4 @@
+import './DayTimetable.sass';
 import React from 'react';
 import LessonTimetable from './LessonTimetable';
 import { PropTypes } from 'prop-types';
@@ -14,7 +15,7 @@ export default function DayTimetable(props) {
     const { weekDay, day } = props;
     
     return (
-        <div>
+        <div className="week-day">
             <p key={weekDay}>{weekDays[weekDay + 1]}</p>
             {day.length ? day.map((item, index) => <LessonTimetable key={index} lesson={item} />) : "нет пар"}
         </div>

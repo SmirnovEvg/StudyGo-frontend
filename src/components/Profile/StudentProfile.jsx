@@ -5,13 +5,13 @@ export default function StudentProfile(props) {
     return (
         <div>
             Student
-            <p>{props.studnumber}</p>
-            <p>{props.firstName}</p>
-            <p>{props.secondName}</p>
-            <p>{props.thirdName}</p>
-            <p>{props.course}</p>
-            <p>{props.group}</p>
-            <p>{props.groupPart}</p>
+            <h3>{props.studnumber}</h3>
+            <h3>{props.firstName}</h3>
+            <h3>{props.secondName}</h3>
+            <h3>{props.thirdName}</h3>
+            <h3>{props.course}</h3>
+            <h3>{props.group}</h3>
+            <h3>{props.groupPart}</h3>
         </div>
     )
 }

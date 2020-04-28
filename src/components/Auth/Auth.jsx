@@ -21,7 +21,7 @@ export default class Auth extends Component {
                     control={
                         <Switch checked={isRegistered} onChange={this.handleCheck('isRegistered')} />
                     }
-                    label="Роль"
+                    label={isRegistered ? 'Регистрация': 'Авторизация'}
                 />
                 {isRegistered ? (
                     <SignUp />

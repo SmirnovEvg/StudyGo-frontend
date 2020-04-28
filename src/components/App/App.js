@@ -5,7 +5,6 @@ import {
 } from 'react-router-dom';
 
 import Auth from '../Auth/Auth';
-import Post from '../Post/Post';
 import Profile from '../Profile/Profile';
 import UserProfile from '../Profile/UserProfile';
 import MessageList from '../Chat/CreateDialog';
@@ -13,12 +12,12 @@ import CreateDialog from '../Chat/MessageList';
 import RouteWithSubRoutes from '../RouteWithSubRoutes/RouteWithSubRoutes';
 import Chat from '../Chat/Chat';
 import Timetable from '../Timetable/Timetable';
+import LaboratoryPage from '../LaboratoryWork/LaboratoryPage';
+import LaboratoryWork from '../LaboratoryWork/LaboratoryWork';
+import EventsPage from '../Events/EventsPage';
+import Main from '../Main/Main';
 
 export const routes = [
-    {
-        path: "/post",
-        component: Post
-    },
     {
         path: "/auth",
         component: Auth
@@ -28,6 +27,10 @@ export const routes = [
         component: Timetable
     },
     {
+        path: "/events",
+        component: EventsPage
+    },
+    {
         exact: true,
         path: "/profile",
         component: Profile,
@@ -35,6 +38,16 @@ export const routes = [
     {
         path: "/profile/:id",
         component: UserProfile
+    },
+    {
+        path: "/laboratory",
+        component: LaboratoryPage,
+        routes: [
+            {
+                path: "/laboratory/:laboratoryId",
+                component: LaboratoryWork
+            },
+        ]
     },
     {
         path: "/chat",
@@ -57,6 +70,7 @@ export default function App() {
     return (
         <Router>
             <main>
+                <Main>
                 <Switch>
                     {
                         routes.map((route, i) => (
@@ -64,6 +78,7 @@ export default function App() {
                         ))
                     }
                 </Switch>
+                </Main>
             </main>
         </Router>
     )

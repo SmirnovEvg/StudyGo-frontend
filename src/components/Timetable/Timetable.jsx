@@ -6,6 +6,7 @@ import Radio from '../Inputs/Radio/Radio';
 import WeekTimetable from './WeekTimetable';
 import TimetableService from '../../services/TimetableService';
 import userIsAuthenticatedRedirect from '../wrappers/userIsAuthenticatedRedirect';
+import AddTimetable from './AddTimetable';
 
 
 class Timetable extends Component {
@@ -26,19 +27,20 @@ class Timetable extends Component {
                 Authorization: token
             }
         })
-
-        const res = await axios.get('http://localhost:3333/api/timetable/', {
-            params: {
-                course: user.data.course,
-                group: user.data.group,
-                groupPart: user.data.groupPart,
-            }
-        })
-        
-        this.setState({
-            firstWeek: res.data.filter(item => item.week === 1)[0].dayOfTheWeek,
-            secondWeek: res.data.filter(item => item.week === 2)[0].dayOfTheWeek,
-        })
+        if(user.data.userId.role === 0){
+            const res = await axios.get('http://localhost:3333/api/timetable/', {
+                params: {
+                    course: user.data.course,
+                    group: user.data.group,
+                    groupPart: user.data.groupPart,
+                }
+            })
+            
+            this.setState({
+                firstWeek: res.data.filter(item => item.week === 1)[0].dayOfTheWeek,
+                secondWeek: res.data.filter(item => item.week === 2)[0].dayOfTheWeek,
+            })
+        }
     }
 
     handleChange = name => event => {
@@ -50,6 +52,7 @@ class Timetable extends Component {
         
         return (
             <div>
+                <AddTimetable/>
                 <Radio
                     checked={weekNumber === '1'}
                     onChange={this.handleChange('weekNumber')}

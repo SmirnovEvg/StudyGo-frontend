@@ -5,6 +5,7 @@ import {
 import userIsAuthenticatedRedirect from '../wrappers/userIsAuthenticatedRedirect';
 
 import DialogList from './DialogList';
+import './Chat.sass';
 import RouteWithSubRoutes from '../RouteWithSubRoutes/RouteWithSubRoutes';
 import { routes } from '../App/App';
 
@@ -14,7 +15,7 @@ function Chat() {
     })
 
     return (
-        <div>
+        <div className="chat-page">
             <DialogList />
             <Switch>
                 {chatRoutes[0].routes.map((route, i) => (

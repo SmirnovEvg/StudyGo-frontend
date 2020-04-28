@@ -2,16 +2,14 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 
 export default function UserStudentProfile(props) {
-    console.log(typeof (props.course));
-    console.log(typeof (props.group));
     return (
         <div>
             Student
-            <p>{props.firstName}</p>
-            <p>{props.secondName}</p>
-            <p>{props.thirdName}</p>
-            <p>{props.course}</p>
-            <p>{props.group}</p>
+            <h3>{props.firstName}</h3>
+            <h3>{props.secondName}</h3>
+            <h3>{props.thirdName}</h3>
+            <h3>{props.course}</h3>
+            <h3>{props.group}</h3>
         </div>
     )
 }

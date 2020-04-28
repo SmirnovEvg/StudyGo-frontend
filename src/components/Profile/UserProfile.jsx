@@ -27,7 +27,8 @@ class UserProfile extends Component {
                     userId: params.id,
                 }
             })
-
+            console.log(res.data);
+            
             res.data.role ?
                 this.setState({
                     id: params.id,
@@ -36,7 +37,8 @@ class UserProfile extends Component {
                     secondName: res.data.secondName,
                     thirdName: res.data.thirdName,
                     department: res.data.department,
-                    rank: res.data.rank
+                    rank: res.data.rank,
+                    additionals: res.data.additionals
                 })
                 :
                 this.setState({

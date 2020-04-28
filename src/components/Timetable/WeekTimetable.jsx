@@ -1,3 +1,4 @@
+import './WeekTimetable.sass';
 import React, { Component } from 'react';
 import DayTimetable from './DayTimetable';
 import { PropTypes } from 'prop-types';
@@ -13,7 +14,7 @@ export default class WeekTimetable extends Component {
 
     render() {
         return (
-            <div>
+            <div className="week">
                 {
                     this.renderDays()
                 }

@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 export default class AuthService {
     static getUser() {
-        return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("user").toString(), 'key').toString(CryptoJS.enc.Utf8));
+        return localStorage.getItem("user") && JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem("user").toString(), 'key').toString(CryptoJS.enc.Utf8));
     }
 
     static getToken() {

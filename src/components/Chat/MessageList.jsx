@@ -1,3 +1,4 @@
+import './MessageList.sass';
 import React, { Component } from 'react';
 import io from "socket.io-client";
 import axios from 'axios';
@@ -111,7 +112,7 @@ class MessageList extends Component {
   render() {
     const { chatMessageText, conversationPartnerName, conversationPartnerId } = this.state
     return (
-      <div>
+      <div className="message-list">
         <Link to={`/profile/${conversationPartnerId}`} >{conversationPartnerName}</Link>
         <div>
           {this.renderMessages()}

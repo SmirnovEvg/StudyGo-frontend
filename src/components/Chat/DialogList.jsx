@@ -127,7 +127,7 @@ class DialogList extends Component {
                 <h1>Dialogs</h1>
                 <TextField
                     id="standard-name"
-                    label="Сообщение"
+                    label="Поиск по имени"
                     margin="normal"
                     name="dialogUserName"
                     onChange={e => this.onTextChange(e)}
