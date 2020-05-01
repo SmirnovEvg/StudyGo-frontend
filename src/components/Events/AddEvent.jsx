@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { createEvent } from '../../actions';
-import TextField from "@material-ui/core/TextField";
 import Button from "../Inputs/Button/Button";
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 

@@ -9,6 +9,8 @@ export default function LessonTimetable({ lesson }) {
             {`${lesson.teacher.secondName} ${lesson.teacher.firstName[0]}. ${lesson.teacher.thirdName[0]}.`}
             <br />
             {`${lesson.subject.name}`}
+            <br />
+            {`${lesson.additional}`}
         </div>
     )
 }

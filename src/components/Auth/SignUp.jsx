@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import TextField from '@material-ui/core/TextField';
 import Button from '../Inputs/Button/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '../Inputs/Switch/Switch';

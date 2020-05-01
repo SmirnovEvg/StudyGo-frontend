@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import StudentLaboratories from './StudentLaboratories';
 
 export default function StudentProfile(props) {
     return (
@@ -12,6 +13,7 @@ export default function StudentProfile(props) {
             <h3>{props.course}</h3>
             <h3>{props.group}</h3>
             <h3>{props.groupPart}</h3>
+            <StudentLaboratories/>
         </div>
     )
 }

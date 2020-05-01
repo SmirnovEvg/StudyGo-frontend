@@ -1,9 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 
-export default function UserTeachertProfile(props) {
-    console.log(props.additionals);
-    
+export default function UserTeachertProfile(props) {    
     return (
         <div>
             Teacher
@@ -17,7 +15,7 @@ export default function UserTeachertProfile(props) {
                 return <div key={index}>
                     {item.subject}
                     <br />
-                    {item.groups.map((group, index) => {
+                    {item.group.map((group, index) => {
                         return <span key={index}>{group} </span>
                     })}
                 </div>

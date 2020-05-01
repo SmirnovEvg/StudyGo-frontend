@@ -27,7 +27,6 @@ class UserProfile extends Component {
                     userId: params.id,
                 }
             })
-            console.log(res.data);
             
             res.data.role ?
                 this.setState({

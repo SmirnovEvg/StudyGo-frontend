@@ -37,7 +37,7 @@ function Profile(props) {
                     headers: {
                         Authorization: token
                     }
-                })
+                })                
 
                 switch (res.data.userId.role) {
                     case 0:

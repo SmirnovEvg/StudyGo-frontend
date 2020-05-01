@@ -15,6 +15,7 @@ import AuthService from '../../services/AuthService';
 import userIsTeacherRedirect from '../wrappers/userIsTeacherRedirect';
 import RouteWithSubRoutes from '../RouteWithSubRoutes/RouteWithSubRoutes';
 import { routes } from '../App/App';
+import CreateLaboratory from './CreateLaboratory';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,22 +27,36 @@ const useStyles = makeStyles((theme) => ({
 
 const LaboratoryPage = () => {
     const classes = useStyles();
-    const teacherId = AuthService.getUser()._id;
+    const [laboratoryClasses, setLaboratoryClasses] = useState([]);
+    const [teacher, setTeacher] = useState([]);
+    
     const laboratoryRoutes = routes.filter(item => {
         return item.path === '/laboratory'
     })
 
-    const [laboratoryClasses, setLaboratoryClasses] = useState([])
 
     useEffect(() => {
+        const getLaboratoryClasses = async () => {
+                const token = AuthService.getToken();
+
+            const res = await axios.get('http://localhost:3333/api/user', {
+                    headers: {
+                        Authorization: token
+                    }
+                }) 
+                setTeacher(res.data)
+                
+
         axios.get('http://localhost:3333/api/laboratoryclass/teacher', {
             params: {
-                teacherId: teacherId
+                teacherId: res.data.userId._id
             }
         }).then(res => {
             setLaboratoryClasses(res.data)
         })
-    }, [teacherId]);
+        }
+        getLaboratoryClasses();
+    }, []);
 
     const [selectedIndex, setSelectedIndex] = React.useState(laboratoryClasses[0] ? laboratoryClasses[0]._id : '');
 
@@ -50,6 +65,8 @@ const LaboratoryPage = () => {
     };
 
     return (
+        <>
+        <CreateLaboratory teacher={teacher}/>
         <div className="laboratory-page">
             <div className={classes.root}>
                 <List component="nav" aria-label="secondary mailbox folder">
@@ -75,6 +92,7 @@ const LaboratoryPage = () => {
                 </Switch>
             </div>
         </div>
+        </>
     )
 }
 
