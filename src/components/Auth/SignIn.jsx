@@ -5,8 +5,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '../Inputs/Switch/Switch';
 import AuthService from '../../services/AuthService';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import { withRouter } from "react-router";
 
 class SignIn extends Component {
+    
     state = {
         studnumber: '',
         password: '',
@@ -32,6 +34,7 @@ class SignIn extends Component {
                 }
             );
             AuthService.setTokenUser(res.data.token, res.data.authUser);
+            this.props.history.push('/');
         } catch (error) {
             console.log(error);
         }
@@ -96,4 +99,4 @@ class SignIn extends Component {
     }
 }
 
-export default SignIn;
+export default withRouter(SignIn);

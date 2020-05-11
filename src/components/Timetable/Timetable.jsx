@@ -13,9 +13,12 @@ class Timetable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userInfo: {},
       firstWeek: [],
       secondWeek: [],
       weekNumber: TimetableService.getWeekNumber().toString(),
+      teachers: [],
+      subjects: [],
     };
   }
 
@@ -27,6 +30,9 @@ class Timetable extends Component {
         Authorization: token,
       },
     });
+
+    this.setState({userInfo:user.data});
+
     if (user.data.userId.role === 0) {
       const res = await axios.get("http://localhost:3333/api/timetable/", {
         params: {
@@ -46,12 +52,15 @@ class Timetable extends Component {
           res.data.filter((item) => item.week === 2).length &&
           res.data.filter((item) => item.week === 2)[0].dayOfTheWeek,
       });
-    } else if (user.data.userId.role === 1) {
-      const res = await axios.get("http://localhost:3333/api/timetable/teacher", {
-        params: {
-          teacher: user.data.userId._id,
-        },
-      });      
+    } else{
+      const res = await axios.get(
+        "http://localhost:3333/api/timetable/teacher",
+        {
+          params: {
+            teacher: user.data.userId._id,
+          },
+        }
+      );
 
       this.setState({
         firstWeek:
@@ -64,6 +73,20 @@ class Timetable extends Component {
           res.data.filter((item) => item.week === 2)[0].dayOfTheWeek,
       });
     }
+
+    const teacherList = await axios.get(
+      "http://localhost:3333/api/user/teachers/",{}
+      );
+      this.setState({
+        teachers: teacherList.data
+      })
+
+    const subjectList = await axios.get(
+      "http://localhost:3333/api/subject",{}
+      );
+      this.setState({
+        subjects: subjectList.data
+      })
   };
 
   handleChange = (name) => (event) => {
@@ -71,12 +94,12 @@ class Timetable extends Component {
   };
 
   render() {
-    const { weekNumber, firstWeek, secondWeek } = this.state;
+    const { userInfo, weekNumber, firstWeek, secondWeek, teachers, subjects } = this.state;
 
     return (
       <div>
-        <AddTimetable />
-        <ImportTimetable />
+        {userInfo.userId && userInfo.userId.role === 2 && <AddTimetable teachers={teachers} subjects={subjects} />}
+        {userInfo.userId && userInfo.userId.role === 2 && <ImportTimetable />}
         <Radio
           checked={weekNumber === "1"}
           onChange={this.handleChange("weekNumber")}
@@ -90,9 +113,9 @@ class Timetable extends Component {
           name="weekNumber"
         />
         {weekNumber === "1" ? (
-          <WeekTimetable week={firstWeek} />
+          <WeekTimetable week={firstWeek} teachers={teachers} subjects={subjects}/>
         ) : (
-          <WeekTimetable week={secondWeek} />
+          <WeekTimetable week={secondWeek} teachers={teachers} subjects={subjects}/>
         )}
       </div>
     );

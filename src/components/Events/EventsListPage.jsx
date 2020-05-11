@@ -5,10 +5,14 @@ import Event from './Event';
 import AddEvent from './AddEvent';
 import { setEvents } from '../../actions';
 import userIsAuthenticatedRedirect from '../wrappers/userIsAuthenticatedRedirect';
+import AuthService from '../../services/AuthService';
 
-const EventsPage = () => {
+const EventsListPage = (props) => {
+  console.log(props);
+
     const dispatch = useDispatch();
-    const events = useSelector(state => state.events)
+    const events = useSelector(state => state.events);
+    const user = AuthService.getUser();   
 
     useEffect(() => {
         axios.get('http://localhost:3333/api/event')
@@ -19,7 +23,7 @@ const EventsPage = () => {
     
     return (
         <div>
-            <AddEvent/>
+            {user.role === 2 && <AddEvent/>}
             {events.map((event, index) => {
                 return <Event key={index} event={event}/>
             })}
@@ -27,4 +31,4 @@ const EventsPage = () => {
     )
 }
 
-export default userIsAuthenticatedRedirect(EventsPage)
+export default userIsAuthenticatedRedirect(EventsListPage)

@@ -1,0 +1,35 @@
+.student-laboratories
+    display: flex
+    &__laboratories 
+        padding: 0 40px
+        width: 100%
+
+.labsList
+    order: 1
+    flex-basis: 62%
+
+.labsListItem
+    text-overflow: clip
+
+.labsContainer
+    order: 3
+    margin-top: 50px
+    flex-basis: 100%
+
+@media (max-width: 1200px)
+    .labsList
+        flex-basis: 60%
+
+@media (max-width: 1000px)
+    .labsList
+        flex-basis: 58%
+
+@media (max-width: 1000px)
+    .labsList
+        flex-basis: 55%
+
+@media (max-width: 800px)
+    .labsList
+        order: 2
+        margin-top: 40px
+        flex-basis: 100%

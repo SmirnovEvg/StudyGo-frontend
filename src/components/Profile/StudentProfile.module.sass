@@ -1,0 +1,255 @@
+.profileContent
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    width: 100%
+
+.userInfo
+    display: flex
+    flex-direction: column
+    order: 2
+    flex-basis: 30%
+    & p, h3
+        margin: 0
+
+.userUpperInfo
+    display: flex
+    & p
+        font-size: 19px
+        font-weight: 100
+        margin-top: 11px
+        &:first-child 
+            margin: 0
+    & h3
+        font-size: 33px
+        font-weight: 700
+
+.userLabsInfo
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    padding-left: 97px
+    width: 100%
+    & h3
+        font-size: 52px
+    & p 
+        width: 130px
+        text-align: center
+        margin: 0
+
+.userGroupInfo
+    margin-top: 20px
+    width: 100%
+    display: flex
+    justify-content: space-around
+    div
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        & h3 
+            font-size: 48px
+            font-weight: 700
+        & p 
+            font-size: 25px
+            font-weight: 100
+
+.signOutButton
+    display: flex
+    justify-content: center
+    margin-top: 20px
+
+@media (max-width: 1480px)
+    .userUpperInfo
+        & p
+            font-size: 16px
+            margin-top: 9px
+        & h3
+            font-size: 30px
+
+    .userLabsInfo
+        padding-left: 77px
+        & h3
+            font-size: 49px
+        & p 
+            width: 120px
+
+    .userGroupInfo
+        margin-top: 18px
+        div
+            & h3 
+                font-size: 45px
+            & p 
+                font-size: 22px
+
+@media (max-width: 1300px)
+    .userUpperInfo
+        & p
+            font-size: 13px
+            margin-top: 7px
+        & h3
+            font-size: 27px
+
+    .userLabsInfo
+        padding-left: 57px
+        & h3
+            font-size: 46px
+        & p 
+            width: 110px
+
+    .userGroupInfo
+        margin-top: 15px
+        div
+            & h3 
+                font-size: 42px
+            & p 
+                font-size: 19px
+
+@media (max-width: 1100px)
+    .userUpperInfo
+        & p
+            font-size: 13px
+            margin-top: 5px
+        & h3
+            font-size: 24px
+
+    .userLabsInfo
+        padding-left: 37px
+        & h3
+            font-size: 37px
+        & p 
+            width: 100px
+
+    .userGroupInfo
+        margin-top: 13px
+        div
+            & h3 
+                font-size: 30px
+            & p 
+                font-size: 19px
+
+@media (max-width: 1100px)
+    .userUpperInfo
+        & p
+            font-size: 13px
+            margin-top: 4px
+        & h3
+            font-size: 20px
+
+    .userLabsInfo
+        padding-left: 27px
+        & h3
+            font-size: 33px
+        & p 
+            width: 90px
+
+    .userGroupInfo
+        margin-top: 10px
+        div
+            & h3 
+                font-size: 24px
+            & p 
+                font-size: 17px
+
+@media (max-width: 800px)
+    .userInfo
+        order: 1
+        flex-basis: 100%
+    .userUpperInfo
+        display: flex
+        & p
+            font-size: 19px
+            margin-top: 11px
+        & h3
+            font-size: 33px
+
+    .userLabsInfo
+        padding-left: 97px
+        & h3
+            font-size: 52px
+        & p 
+            width: 130px
+
+    .userGroupInfo
+        margin-top: 20px
+        width: 100%
+        div
+            & h3 
+                font-size: 48px
+            & p 
+                font-size: 25px
+
+@media (max-width: 576px)
+    .userUpperInfo
+        & p
+            font-size: 16px
+            margin-top: 9px
+        & h3
+            font-size: 30px
+
+    .userLabsInfo
+        padding-left: 77px
+        & h3
+            font-size: 49px
+        & p 
+            width: 120px
+
+    .userGroupInfo
+        margin-top: 18px
+        div
+            & h3 
+                font-size: 45px
+            & p 
+                font-size: 22px
+
+@media (max-width: 576px)
+    .userUpperInfo
+        & p
+            font-size: 13px
+            margin-top: 5px
+        & h3
+            font-size: 24px
+
+    .userLabsInfo
+        padding-left: 37px
+        & h3
+            font-size: 37px
+        & p 
+            width: 100px
+
+    .userGroupInfo
+        margin-top: 13px
+        div
+            & h3 
+                font-size: 30px
+            & p 
+                font-size: 19px
+
+@media (max-width: 440px)
+    .userInfo
+        margin-top: 10px
+        padding: 0 !important
+        box-shadow: none !important
+
+    .userUpperInfo
+        & p
+            font-size: 13px
+            margin-top: 4px
+        & h3
+            font-size: 20px
+
+    .userLabsInfo
+        padding-left: 27px
+        & h3
+            font-size: 33px
+        & p 
+            width: 90px
+
+    .userGroupInfo
+        margin-top: 10px
+        div
+            & h3 
+                font-size: 24px
+            & p 
+                font-size: 17px

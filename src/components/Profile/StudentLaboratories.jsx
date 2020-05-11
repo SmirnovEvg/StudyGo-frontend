@@ -1,4 +1,4 @@
-import "./StudentLaboratories.sass";
+import styles from "./StudentLaboratories.module.sass"
 import React, { useState, useEffect } from "react";
 import AuthService from "../../services/AuthService";
 import axios from "axios";
@@ -7,12 +7,13 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles } from "@material-ui/core/styles";
 import StudentLaboratoryWork from "./StudentLaboratoryWork";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
+    minWidth: 0
   },
 }));
 
@@ -33,8 +34,8 @@ export default function StudentLaboratories() {
           Authorization: token,
         },
       });
-      setStudent(user.data)
-      
+      setStudent(user.data);
+
       axios
         .get("http://localhost:3333/api/laboratoryclass/student", {
           params: {
@@ -55,25 +56,28 @@ export default function StudentLaboratories() {
   };
 
   return (
-    <div className="student-laboratories">
-      <div className={classes.root}>
-        <List component="nav" aria-label="secondary mailbox folder">
-          {laboratoryClasses &&
-            laboratoryClasses.map((item, index) => (
-              <ListItem
-                button
-                selected={selectedIndex === item._id}
-                onClick={(event) => handleListItemClick(event, item._id)}
-                key={index}
-              >
-                <ListItemText primary={`${item.subject.name}`} />
-              </ListItem>
-            ))}
-        </List>
-      </div>
-      <div className="student-laboratories__laboratories">
-        <StudentLaboratoryWork laboratoryId={selectedIndex} student={student}/>
-      </div>
-    </div>
+    <>
+      <Paper elevation={3} className={styles.labsList}>
+        <div className={classes.root}>
+          <List component="nav">
+            {laboratoryClasses &&
+              laboratoryClasses.map((item, index) => (
+                <ListItem
+                  button
+                  selected={selectedIndex === item._id}
+                  onClick={(event) => handleListItemClick(event, item._id)}
+                  key={index}
+                  className={styles.labsListItem}
+                >
+                  <ListItemText primary={`${item.subject.name}`} />
+                </ListItem>
+              ))}
+          </List>
+        </div>
+      </Paper>
+      <Paper elevation={3} className={styles.labsContainer}>
+        <StudentLaboratoryWork laboratoryId={selectedIndex} student={student} />
+      </Paper>
+    </>
   );
 }

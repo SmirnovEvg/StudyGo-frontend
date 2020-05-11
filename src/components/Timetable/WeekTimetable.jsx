@@ -5,10 +5,10 @@ import { PropTypes } from 'prop-types';
 
 export default class WeekTimetable extends Component {
     renderDays = () => {
-        const { week } = this.props;
+        const { week, teachers, subjects } = this.props;
 
         return Object.values(week).map((item, index) => (
-            <DayTimetable key={index} day={item} weekDay={index} />
+            <DayTimetable key={index} day={item} weekDay={index} teachers={teachers} subjects={subjects}/>
         ))
     }
 

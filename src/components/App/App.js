@@ -14,8 +14,9 @@ import Chat from '../Chat/Chat';
 import Timetable from '../Timetable/Timetable';
 import LaboratoryPage from '../LaboratoryWork/LaboratoryPage';
 import LaboratoryWork from '../LaboratoryWork/LaboratoryWork';
-import EventsPage from '../Events/EventsPage';
+import EventsListPage from '../Events/EventsListPage';
 import Main from '../Main/Main';
+import EventPage from '../Events/EventPage';
 
 export const routes = [
     {
@@ -27,8 +28,13 @@ export const routes = [
         component: Timetable
     },
     {
+        exact: true,
         path: "/events",
-        component: EventsPage
+        component: EventsListPage
+    },
+    {
+        path: "/events/:id",
+        component: EventPage
     },
     {
         exact: true,

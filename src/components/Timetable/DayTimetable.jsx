@@ -12,12 +12,12 @@ export default function DayTimetable(props) {
         5: "Пятница",
         6: "Суббота"
     };
-    const { weekDay, day } = props;
+    const { weekDay, day, teachers, subjects } = props;
     
     return (
         <div className="week-day">
             <p key={weekDay}>{weekDays[weekDay + 1]}</p>
-            {day.length ? day.map((item, index) => <LessonTimetable key={index} lesson={item} />) : "нет пар"}
+            {day.length ? day.map((item, index) => <LessonTimetable key={index} lesson={item} teachers={teachers} subjects={subjects}/>) : "нет пар"}
         </div>
     )
 }

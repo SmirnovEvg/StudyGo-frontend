@@ -1,4 +1,4 @@
-import "./Number.sass";
+import styles from "./Number.module.sass"
 import React, { useState, useEffect } from "react";
 import dateFormat from "dateformat";
 import TableCell from "@material-ui/core/TableCell";
@@ -32,7 +32,7 @@ export default function LaboratoryNumber(props) {
   };
 
   return (
-    <TableCell key={props.number}>
+    <TableCell key={props.number} className={styles.timetableHeadNumber}>
       <Tooltip
         key={generateNotificationID()}
         open={open}

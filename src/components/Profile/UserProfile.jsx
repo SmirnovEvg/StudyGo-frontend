@@ -7,6 +7,7 @@ import UserStudentProfile from './UserStudentProfile';
 import UserTeacherProfile from './UserTeacherProfile';
 
 class UserProfile extends Component {
+
     state = {
         id: '',
         firstName: '',

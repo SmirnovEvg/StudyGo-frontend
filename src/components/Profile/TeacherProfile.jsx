@@ -4,12 +4,9 @@ import { PropTypes } from "prop-types";
 import AddAdditionalForm from "./AddAdditionalForm";
 
 import { useSelector, useDispatch } from "react-redux";
-import { switchFormDisplay, removeAdditional } from "../../actions";
+import { removeAdditional } from "../../actions";
 
 function TeachertProfile(props) {
-  const AddAdditionalFormDisplay = useSelector(
-    (state) => state.AddAdditionalFormDisplay
-  );
   const additionals = useSelector((state) => state.Additionals);
   const dispatch = useDispatch();
 
@@ -32,12 +29,7 @@ function TeachertProfile(props) {
       <h3>{props.department}</h3>
       <h3>{props.rank}</h3>
       <h2>Допы</h2>
-      {!AddAdditionalFormDisplay && (
-        <button onClick={() => dispatch(switchFormDisplay())}>+</button>
-      )}
-      {AddAdditionalFormDisplay && (
-        <AddAdditionalForm subjects={props.subjects} />
-      )}
+      <AddAdditionalForm subjects={props.subjects} />
       {additionals &&
         additionals.map((item, index) => {
           return (

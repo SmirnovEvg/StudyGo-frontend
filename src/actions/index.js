@@ -1,9 +1,3 @@
-export const switchFormDisplay = () => {
-    return{
-        type: 'SWITCH_FORM_DISPLAY'
-    }
-}
-
 export const addAdditional = (item) => {
     return{
         type: 'ADD_ADDITIONAL',

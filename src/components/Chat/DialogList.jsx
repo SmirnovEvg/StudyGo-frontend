@@ -20,21 +20,23 @@ class DialogList extends Component {
         const user = await AuthService.getUser();
 
         this.setState({
-            chatMessageUser: user._id
+            chatMessageUser: user && user._id
         })
+        
+        if (this.state.chatMessageUser) {
+            const res = await axios.get('http://localhost:3333/api/chat/dialog', {
+                params: {
+                    userId: this.state.chatMessageUser
+                }
+            })
 
-        const res = await axios.get('http://localhost:3333/api/chat/dialog', {
-            params: {
-                userId: this.state.chatMessageUser
-            }
-        })
+            res.data.partnerIds.push({ id: user._id })
 
-        res.data.partnerIds.push({ id: user._id })
-
-        this.setState({
-            dialogs: res.data.dialog,
-            partners: res.data.partnerIds
-        })
+            this.setState({
+                dialogs: res.data.dialog,
+                partners: res.data.partnerIds
+            })
+        }
     }
 
     onTextChange = async e => {
@@ -44,7 +46,7 @@ class DialogList extends Component {
             return dialog.user.firstName.toLowerCase().includes(this.state.dialogUserName.toLowerCase()) || dialog.user.secondName.toLowerCase().includes(this.state.dialogUserName.toLowerCase())
         })
 
-        if (this.state.dialogUserName) {
+        if (this.state.dialogUserName && this.state.partners) {
             const res = await axios.get('http://localhost:3333/api/chat/users', {
                 params: {
                     searchText: this.state.dialogUserName,

@@ -18,7 +18,7 @@ class MessageList extends Component {
     chat: [],
   }
 
-  componentDidMount = async () => {    
+  componentDidMount = async () => {
     const user = await AuthService.getUser();
 
     let { match: { params } } = this.props;
@@ -42,14 +42,22 @@ class MessageList extends Component {
         dialogId: params.dialogId
       }
     })
+
+    axios.put('http://localhost:3333/api/chat/message/unread', {
+        dialogId: params.dialogId,
+        partnerId: this.state.conversationPartnerId
+    })
+
     this.setState({
       chat: res.data
     })
 
-    socket.on("chat message", ({ chatMessageUser, chatMessageText }) => {
-      this.setState({
-        chat: [...this.state.chat, { chatMessageUser, chatMessageText }]
-      });
+    socket.on("chat message", ({ chatMessageUser, chatMessageText, dialogId }) => {
+      if (dialogId === this.state.dialogId) {
+        this.setState({
+          chat: [...this.state.chat, { chatMessageUser, chatMessageText }]
+        });
+      }
     });
   }
 
@@ -87,7 +95,8 @@ class MessageList extends Component {
 
   onMessageSubmit = async () => {
     const { chatMessageUser, chatMessageText, dialogId } = this.state;
-    socket.emit("chat message", { chatMessageUser, chatMessageText });
+    socket.emit("chat message", { chatMessageUser, chatMessageText, dialogId });
+    socket.emit("unread message", { chatMessageUser, dialogId });
     this.setState({ chatMessageText: "" });
 
     await axios.post('http://localhost:3333/api/chat/message', {

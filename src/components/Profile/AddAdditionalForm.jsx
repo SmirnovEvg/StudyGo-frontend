@@ -15,8 +15,13 @@ import FormControl from "@material-ui/core/FormControl";
 import Chip from "@material-ui/core/Chip";
 import Paper from "@material-ui/core/Paper";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 import { useDispatch } from "react-redux";
-import { switchFormDisplay, addAdditional } from "../../actions";
+import { addAdditional } from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -48,9 +53,9 @@ export default function AddAdditionalForm({ subjects }) {
   const [classTime, setClassTime] = useState("");
   const [groups, setGroup] = useState([]);
   const [groupValue, setGroupValue] = useState("");
-
   const [week, setWeek] = useState("");
   const [course, setCourse] = useState("");
+  const [open, setOpen] = React.useState(false);
 
   const handleDelete = (chipToDelete) => async () => {
     setGroup((chips) => chips.filter((chip) => chip !== chipToDelete));
@@ -117,162 +122,184 @@ export default function AddAdditionalForm({ subjects }) {
           additional: true,
         })
         .then((res) => {
-            console.log(res.data);
           dispatch(addAdditional(res.data));
+          handleClose();
         });
     }
   };
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div id="addForm">
-      <button onClick={() => dispatch(switchFormDisplay())}>-</button>
-      <ValidatorForm
-        onSubmit={() => createNewAdditional()}
-        onError={(errors) => console.log(errors)}
+      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+        Добавить занятие
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <FormControl className={classes.formControl}>
-          <SelectValidator
-            label="Предмет"
-            id="demo-simple-select"
-            value={subject}
-            onChange={handleChange("subject")}
-            validators={["required"]}
-            errorMessages={["Это поле обязательно"]}
-          >
-            {subjects.map((item, index) => {
-              return (
-                <MenuItem key={index} value={item._id}>
-                  {item.name}
-                </MenuItem>
-              );
-            })}
-          </SelectValidator>
-        </FormControl>
+        <DialogTitle id="alert-dialog-title">{"Добавить занятие"}</DialogTitle>
+        <ValidatorForm
+          onSubmit={() => createNewAdditional()}
+          onError={(errors) => console.log(errors)}
+        >
+          <DialogContent>
+            <FormControl className={classes.formControl}>
+              <SelectValidator
+                label="Предмет"
+                id="demo-simple-select"
+                value={subject}
+                onChange={handleChange("subject")}
+                validators={["required"]}
+                errorMessages={["Это поле обязательно"]}
+              >
+                {subjects &&
+                  subjects.map((item, index) => {
+                    return (
+                      <MenuItem key={index} value={item._id}>
+                        {item.name}
+                      </MenuItem>
+                    );
+                  })}
+              </SelectValidator>
+            </FormControl>
 
-        <TextValidator
-          id="standard-name"
-          label="Аудитория"
-          value={classroomNumber}
-          onChange={handleChange("classroomNumber")}
-          margin="normal"
-          validators={["required", "minStringLength: 1"]}
-          errorMessages={["Это поле обязательно", "Некорректное число"]}
-        />
+            <TextValidator
+              id="standard-name"
+              label="Аудитория"
+              value={classroomNumber}
+              onChange={handleChange("classroomNumber")}
+              margin="normal"
+              validators={["required", "minStringLength: 1"]}
+              errorMessages={["Это поле обязательно", "Некорректное число"]}
+            />
 
-        <FormControl className={classes.formControl}>
-          <SelectValidator
-            label="Корпус"
-            id="demo-simple-select"
-            value={hall}
-            onChange={handleChange("hall")}
-            validators={["required"]}
-            errorMessages={["Это поле обязательно"]}
-          >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
-            <MenuItem value={4}>4</MenuItem>
-          </SelectValidator>
-        </FormControl>
+            <FormControl className={classes.formControl}>
+              <SelectValidator
+                label="Корпус"
+                id="demo-simple-select"
+                value={hall}
+                onChange={handleChange("hall")}
+                validators={["required"]}
+                errorMessages={["Это поле обязательно"]}
+              >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+              </SelectValidator>
+            </FormControl>
 
-        <FormControl className={classes.formControl}>
-          <SelectValidator
-            label="Неделя"
-            id="demo-simple-select"
-            value={week}
-            onChange={handleChange("week")}
-          >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-          </SelectValidator>
-        </FormControl>
+            <FormControl className={classes.formControl}>
+              <SelectValidator
+                label="Неделя"
+                id="demo-simple-select"
+                value={week}
+                onChange={handleChange("week")}
+                validators={["required"]}
+                errorMessages={["Это поле обязательно"]}
+              >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+              </SelectValidator>
+            </FormControl>
 
-        <FormControl className={classes.formControl}>
-          <SelectValidator
-            label="Курс"
-            id="demo-simple-select"
-            value={course}
-            onChange={handleChange('course')}
-          >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
-            <MenuItem value={4}>4</MenuItem>
-          </SelectValidator>
-        </FormControl>
+            <FormControl className={classes.formControl}>
+              <SelectValidator
+                label="Курс"
+                id="demo-simple-select"
+                value={course}
+                onChange={handleChange("course")}
+                validators={["required"]}
+                errorMessages={["Это поле обязательно"]}
+              >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+              </SelectValidator>
+            </FormControl>
 
-        <FormControl className={classes.formControl}>
-          <SelectValidator
-            label="День недели"
-            id="demo-simple-select"
-            value={dayOfTheWeek}
-            onChange={handleChange("dayOfTheWeek")}
-            validators={["required"]}
-            errorMessages={["Это поле обязательно"]}
-          >
-            <MenuItem value={1}>Понедельник</MenuItem>
-            <MenuItem value={2}>Вторник</MenuItem>
-            <MenuItem value={3}>Среда</MenuItem>
-            <MenuItem value={4}>Четверг</MenuItem>
-            <MenuItem value={5}>Пятница</MenuItem>
-            <MenuItem value={6}>Суббота</MenuItem>
-          </SelectValidator>
-        </FormControl>
+            <FormControl className={classes.formControl}>
+              <SelectValidator
+                label="День недели"
+                id="demo-simple-select"
+                value={dayOfTheWeek}
+                onChange={handleChange("dayOfTheWeek")}
+                validators={["required"]}
+                errorMessages={["Это поле обязательно"]}
+              >
+                <MenuItem value={1}>Понедельник</MenuItem>
+                <MenuItem value={2}>Вторник</MenuItem>
+                <MenuItem value={3}>Среда</MenuItem>
+                <MenuItem value={4}>Четверг</MenuItem>
+                <MenuItem value={5}>Пятница</MenuItem>
+                <MenuItem value={6}>Суббота</MenuItem>
+              </SelectValidator>
+            </FormControl>
 
-        <FormControl className={classes.formControl}>
-          <SelectValidator
-            label="Время"
-            id="demo-simple-select"
-            value={classTime}
-            onChange={handleChange("classTime")}
-            validators={["required"]}
-            errorMessages={["Это поле обязательно"]}
-          >
-            <MenuItem value={1}>8:00-9:35</MenuItem>
-            <MenuItem value={2}>9:50-11:25</MenuItem>
-            <MenuItem value={3}>11:40-13:15</MenuItem>
-            <MenuItem value={4}>13:50-15:25</MenuItem>
-            <MenuItem value={5}>15:40-17:15</MenuItem>
-            <MenuItem value={6}>17:30-19:05</MenuItem>
-            <MenuItem value={7}>19:20-20:55</MenuItem>
-          </SelectValidator>
-        </FormControl>
+            <FormControl className={classes.formControl}>
+              <SelectValidator
+                label="Время"
+                id="demo-simple-select"
+                value={classTime}
+                onChange={handleChange("classTime")}
+                validators={["required"]}
+                errorMessages={["Это поле обязательно"]}
+              >
+                <MenuItem value={1}>8:00-9:35</MenuItem>
+                <MenuItem value={2}>9:50-11:25</MenuItem>
+                <MenuItem value={3}>11:40-13:15</MenuItem>
+                <MenuItem value={4}>13:50-15:25</MenuItem>
+                <MenuItem value={5}>15:40-17:15</MenuItem>
+                <MenuItem value={6}>17:30-19:05</MenuItem>
+                <MenuItem value={7}>19:20-20:55</MenuItem>
+              </SelectValidator>
+            </FormControl>
 
-        <Paper className={classes.root}>
-          {groups.map((item, index) => {
-            return (
-              <Chip
-                key={index}
-                label={item}
-                onDelete={handleDelete(item)}
-                className={classes.chip}
-              />
-            );
-          })}
-        </Paper>
+            <Paper className={classes.root}>
+              {groups.map((item, index) => {
+                return (
+                  <Chip
+                    key={index}
+                    label={item}
+                    onDelete={handleDelete(item)}
+                    className={classes.chip}
+                  />
+                );
+              })}
+            </Paper>
 
-        <TextValidator
-          id="standard-name"
-          label="Группы"
-          value={groupValue}
-          onChange={changeGroupValue}
-          margin="normal"
-        />
-        <Button variant="contained" color="secondary" onClick={addGroup}>
-          +
-        </Button>
-        <Button variant="contained" color="secondary" type="submit">
-          Добавить
-        </Button>
-      </ValidatorForm>
+            <TextValidator
+              id="standard-name"
+              label="Группы"
+              value={groupValue}
+              onChange={changeGroupValue}
+              margin="normal"
+            />
+            <Button variant="contained" color="secondary" onClick={addGroup}>
+              +
+            </Button>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Отмена
+            </Button>
+            <Button type="submit" color="primary" autoFocus>
+              Добавить
+            </Button>
+          </DialogActions>
+        </ValidatorForm>
+      </Dialog>
     </div>
   );
 }

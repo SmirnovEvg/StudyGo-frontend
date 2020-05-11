@@ -3,12 +3,17 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { createEvent } from '../../actions';
 import Button from "../Inputs/Button/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 export default function AddEvent() {
     const dispatch = useDispatch();
     const [eventName, setEventName] = useState('');
     const [eventDescription, setEventDescription] = useState('');
+    const [open, setOpen] = React.useState(false);
     const changeName = e => {
         setEventName(e.target.value);
     }
@@ -24,14 +29,36 @@ export default function AddEvent() {
             .then(res => {
                 dispatch(createEvent(res.data))
                 setEventName('');
-                setEventDescription('')
+                setEventDescription('');
+                handleClose();
             })
     }
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
         <div>
-            <ValidatorForm
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                Добавить
+            </Button>
+        <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Добавить занятие"}</DialogTitle>
+                <ValidatorForm
                     onSubmit={() => addEvent()}
+                    onError={(errors) => console.log(errors)}
                 >
+                <DialogContent>
             <TextValidator
                 id="standard-name"
                 label="Название"
@@ -52,14 +79,17 @@ export default function AddEvent() {
                 validators={['required']}
                 errorMessages={['Это поле обязательно']}
             />
-            <Button
-                variant="contained"
-                color="secondary"
-                type="submit"
-            >
-                Добавить
-        </Button>
-        </ValidatorForm>
+            </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                    Отмена
+                    </Button>
+                    <Button type="submit" color="primary" autoFocus>
+                    Добавить
+                    </Button>
+                </DialogActions>
+                </ValidatorForm>
+            </Dialog>
         </div>
     )
 }

@@ -1,5 +1,8 @@
+import styles from "./StudentLaboratoryWork.module.sass";
 import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import TableContainer from '@material-ui/core/TableContainer';
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,7 +11,15 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import LaboratoryNumber from "./LaboratoryNumber";
 
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+});
+
 export default function StudentLaboratoryWork(props) {
+  const classes = useStyles();
+
   const [laboratoryClass, setLaboratoryClass] = useState({});
   const [laboratoryWorks, setLaboratoryWorks] = useState([]);
   const [laboratoryTime, setLaboratoryTime] = useState([]);
@@ -96,12 +107,18 @@ export default function StudentLaboratoryWork(props) {
         });
         lab[0]
           ? line.push(
-              <TableCell key={generateNotificationID()}>
+              <TableCell
+                key={generateNotificationID()}
+                className={styles.labNumber}
+              >
                 <p>{lab[0].passed}</p>
               </TableCell>
             )
           : line.push(
-              <TableCell key={generateNotificationID()}>
+              <TableCell
+                key={generateNotificationID()}
+                className={styles.labNumber}
+              >
                 <p>-</p>
               </TableCell>
             );
@@ -111,8 +128,8 @@ export default function StudentLaboratoryWork(props) {
   };
 
   return (
-    <Paper>
-      <Table aria-label="simple table">
+    <TableContainer component={Paper}>
+      <Table aria-label="simple table" className={classes.table}>
         <TableHead key="name">{createTableHead()}</TableHead>
         <TableBody>
           {laboratoryClass &&
@@ -124,6 +141,6 @@ export default function StudentLaboratoryWork(props) {
             ))}
         </TableBody>
       </Table>
-    </Paper>
+    </TableContainer>
   );
 }
