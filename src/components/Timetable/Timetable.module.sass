@@ -1,0 +1,32 @@
+.timetable
+    margin-top: 20px
+    width: 100%
+    &Container
+        width: 100%
+    &Week
+        display: flex
+        align-items: center
+        flex-wrap: wrap
+        &Icon
+            display: flex
+            justify-content: center
+            align-items: center
+            background-color: #ED1D24
+            width: 35px
+            height: 35px
+            border-radius: 50%
+            color: #fff
+            font-weight: 500
+
+        &Buttons
+            display: flex
+
+.filterForm
+    margin-left: 20px
+
+
+@media (max-width: 640px)
+    .timetable
+        &Week
+            &Buttons
+                flex-wrap: wrap

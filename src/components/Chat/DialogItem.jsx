@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import styles from './DialogItem.module.sass'
 import axios from 'axios';
 import io from "socket.io-client";
 
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import PropTypes from 'prop-types';
+import ListItem from '@material-ui/core/ListItem';
 
 const socket = io.connect("http://localhost:5000");
 
 function DialogItem(props) {
+    const dialogId = props.location.pathname.split('/')[2];
+
     const [unreadMeassagesCount, setUnreadMeassagesCount] = useState(0)
     useEffect(() => {
         axios.get('http://localhost:3333/api/chat/message/unread', {
@@ -28,9 +32,29 @@ function DialogItem(props) {
         
     }, [props.dialog])
     return (
-        <li key={props.dialog.id}>
-            <Link to={`/chat/${props.dialog.id}`}>{props.dialog.user.secondName} {props.dialog.user.firstName}</Link> {unreadMeassagesCount}
-        </li>
+        <ListItem 
+            component={Link} 
+            to={`/chat/${props.dialog.id}`} 
+            key={props.dialog.id}
+            style={{
+                display: 'flex', 
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '15px 5px',
+                color: '#707070',
+                borderBottom: '1px solid #B7B7B7',
+                width: '100%',
+                backgroundColor: `${dialogId === props.dialog.id ? '#F3F3F3' : 'white'}`,
+                className: styles.dialogItem
+            }}
+        >
+            <div className={styles.partnerName}>
+                {props.dialog.user.secondName} {props.dialog.user.firstName}
+            </div>
+            {unreadMeassagesCount ? (<div className={styles.partnerUnreadMessages}>
+                {unreadMeassagesCount}
+            </div>) : (<></>)}
+        </ListItem>
     )
 }
 

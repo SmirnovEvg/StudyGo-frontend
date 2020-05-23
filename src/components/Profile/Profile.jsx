@@ -21,8 +21,8 @@ function Profile(props) {
   const [groupPart, setGroupPart] = useState("");
   const [department, setDepartment] = useState("");
   const [rank, setRank] = useState("");
-  const [additionals, setAdditional] = useState("");
-  const [subjects, setSubject] = useState("");
+  const [additionals, setAdditional] = useState([]);
+  const [subjects, setSubject] = useState([]);
   const [studentId, setStudentId] = useState("");
 
   const dispatch = useDispatch();

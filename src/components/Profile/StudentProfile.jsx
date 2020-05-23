@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./StudentProfile.module.sass";
+import { withRouter } from "react-router";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import { PropTypes } from "prop-types";
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function StudentProfile(props) {
+function StudentProfile(props) {
   const classes = useStyles();
   const [allLabs, setAllLabs] = useState(0);
   const [passedLabs, setPassedLabs] = useState(0);
@@ -52,6 +53,7 @@ export default function StudentProfile(props) {
   const signOut = () => {
     AuthService.removeTokenUser();
     props.history.push("/auth");
+    window.location.reload(false);
   };
 
   return (
@@ -61,9 +63,9 @@ export default function StudentProfile(props) {
         <div className={styles.userUpperInfo}>
           <div className={styles.userMainInfo}>
             <p>Фамилия</p>
-            <h3>{props.firstName}</h3>
-            <p>Имя</p>
             <h3>{props.secondName}</h3>
+            <p>Имя</p>
+            <h3>{props.firstName}</h3>
             <p>Отчество</p>
             <h3>{props.thirdName}</h3>
             <p>Номер студенческого</p>
@@ -97,6 +99,8 @@ export default function StudentProfile(props) {
     </div>
   );
 }
+
+export default withRouter(StudentProfile)
 
 StudentProfile.propTypes = {
   studnumber: PropTypes.oneOfType([

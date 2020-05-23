@@ -1,0 +1,125 @@
+.profileContent
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    align-items: center
+    width: 100%
+
+.userInfo
+    display: flex
+    flex-direction: column
+    width: 35%
+    & p, h3
+        margin: 0
+
+.profileLogo
+    width: 50%
+    opacity: 0.22
+
+.userMainInfo
+    & p
+        font-size: 19px
+        font-weight: 100
+        margin-top: 11px
+        &:first-child 
+            margin: 0
+    & h3
+        font-size: 33px
+        font-weight: 700
+
+.userGroupInfo
+    margin-top: 20px
+    width: 100%
+    display: flex
+    justify-content: space-around
+    div
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        & h3 
+            font-size: 48px
+            font-weight: 700
+        & p 
+            font-size: 25px
+            font-weight: 100
+
+.messageButton
+    margin-top: 20px
+    display: flex
+    justify-content: center
+
+@media (max-width: 1480px)
+    .userMainInfo
+        & p
+            font-size: 16px
+            margin-top: 9px
+        & h3
+            font-size: 30px
+
+    .userGroupInfo
+        margin-top: 18px
+        div
+            & h3 
+                font-size: 45px
+            & p 
+                font-size: 22px
+
+@media (max-width: 1300px)
+    .userMainInfo
+        & p
+            font-size: 13px
+            margin-top: 7px
+        & h3
+            font-size: 27px
+
+    .userGroupInfo
+        margin-top: 15px
+        div
+            & h3 
+                font-size: 42px
+            & p 
+                font-size: 19px
+
+@media (max-width: 800px)
+    .profileLogo
+        display: none
+        
+    .userInfo
+        width: 100%
+
+    .userMainInfo
+        & p
+            font-size: 16px
+            margin-top: 9px
+        & h3
+            font-size: 30px
+
+    .userGroupInfo
+        margin-top: 18px
+        div
+            & h3 
+                font-size: 45px
+            & p 
+                font-size: 22px
+
+@media (max-width: 440px)
+    .userInfo
+        margin-top: 10px
+        padding: 0 !important
+        box-shadow: none !important
+
+    .userMainInfo
+        & p
+            font-size: 16px
+            margin-top: 9px
+        & h3
+            font-size: 30px
+
+    .userGroupInfo
+        margin-top: 18px
+        div
+            & h3 
+                font-size: 45px
+            & p 
+                font-size: 22px

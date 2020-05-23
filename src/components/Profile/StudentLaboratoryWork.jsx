@@ -2,13 +2,11 @@ import styles from "./StudentLaboratoryWork.module.sass";
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import TableContainer from '@material-ui/core/TableContainer';
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import LaboratoryNumber from "./LaboratoryNumber";
 
 const useStyles = makeStyles({
@@ -128,7 +126,6 @@ export default function StudentLaboratoryWork(props) {
   };
 
   return (
-    <TableContainer component={Paper}>
       <Table aria-label="simple table" className={classes.table}>
         <TableHead key="name">{createTableHead()}</TableHead>
         <TableBody>
@@ -141,6 +138,5 @@ export default function StudentLaboratoryWork(props) {
             ))}
         </TableBody>
       </Table>
-    </TableContainer>
   );
 }

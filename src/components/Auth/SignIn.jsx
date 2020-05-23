@@ -35,6 +35,7 @@ class SignIn extends Component {
             );
             AuthService.setTokenUser(res.data.token, res.data.authUser);
             this.props.history.push('/');
+            window.location.reload(false);
         } catch (error) {
             console.log(error);
         }

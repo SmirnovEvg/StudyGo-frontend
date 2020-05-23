@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import styles from './DialogList.module.sass';
 import axios from 'axios';
 import AuthService from '../../services/AuthService';
 
 import DialogItem from './DialogItem';
 import SearchDialogItem from './SearchDialogItem';
 import TextField from '@material-ui/core/TextField';
+import List from '@material-ui/core/List';
 
 class DialogList extends Component {
     state = {
@@ -100,7 +102,7 @@ class DialogList extends Component {
             <>
                 {searchTeachers.length ?
                     <>
-                        <li>Преподаватели</li>
+                        <li className={styles.labelText}>Преподаватели</li>
                         {searchTeachers.map(item => (
                             <SearchDialogItem dialog={item} key={item._id} />
                         ))}
@@ -110,7 +112,7 @@ class DialogList extends Component {
                 }
                 {searchStudents.length ?
                     <>
-                        <li>Студенты</li>
+                        <li className={styles.labelText}>Студенты</li>
                         {searchStudents.map(item => (
                             <SearchDialogItem dialog={item} key={item._id} />
                         ))}
@@ -125,25 +127,26 @@ class DialogList extends Component {
     render() {
         const { dialogUserName, searchDialogs, searchStudents, searchTeachers } = this.state;
         return (
-            <div>
-                <h1>Dialogs</h1>
+            <div className={styles.dialogList}>
+                <h3>Диалоги</h3>
                 <TextField
                     id="standard-name"
-                    label="Поиск по имени"
+                    label="Поиск"
                     margin="normal"
                     name="dialogUserName"
                     onChange={e => this.onTextChange(e)}
                     value={dialogUserName}
+                    style={{width: '100%'}}
                 />
-                <ul>
+                <List component="nav" aria-label="secondary mailbox folder">
                     {this.renderDialogs()}
                     {this.renderSearchList()}
                     {!searchDialogs.length && !searchStudents.length && !searchTeachers.length && dialogUserName ?
-                        <li>Не найдено</li>
+                        <li className={styles.labelText}>Не найдено</li>
                         :
                         <></>
                     }
-                </ul>
+                </List>
             </div>
         )
     }

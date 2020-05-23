@@ -20,7 +20,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 150,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -79,9 +79,9 @@ export default function AddTimetable({ teachers, subjects }) {
     setSubject(e.target.value);
   };
 
-  const addEvent = () => {
+  const addEvent = async () => {
     if (groups.length) {
-      axios.post("http://localhost:3333/api/timetable", {
+      await axios.post("http://localhost:3333/api/timetable", {
         teacher: teacher,
         subject: subject,
         classroomNumber: classroomNumber,
@@ -129,7 +129,7 @@ export default function AddTimetable({ teachers, subjects }) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="contained" color="primary" onClick={handleClickOpen}>
         Добавить занятие
       </Button>
 
@@ -346,10 +346,10 @@ export default function AddTimetable({ teachers, subjects }) {
             </FormControl>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color="primary" variant="contained">
               Отмена
             </Button>
-            <Button type="submit" color="primary" autoFocus>
+            <Button type="submit" color="primary" variant="contained">
               Добавить
             </Button>
           </DialogActions>

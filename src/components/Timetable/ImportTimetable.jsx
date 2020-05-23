@@ -86,16 +86,16 @@ export default function ImportTimetable() {
     }
   };
 
-  const setNewExcel = () => {
+  const setNewExcel = async () => {
     if (exsel.length) {
-      axios.delete("http://localhost:3333/api/timetable/clear", {
+      await axios.delete("http://localhost:3333/api/timetable/clear", {
         data: {
           course,
         },
       });
       for (let i = 0; i < exsel.length; i++) {
         const element = exsel[i];
-        axios.post("http://localhost:3333/api/timetable", {
+        await axios.post("http://localhost:3333/api/timetable", {
           teacher: element.teacher,
           subject: element.subject,
           classroomNumber: element.classroomNumber,
@@ -121,7 +121,7 @@ export default function ImportTimetable() {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="contained" color="primary" onClick={handleClickOpen}>
         Импортировать расписание
       </Button>
       <Dialog
@@ -162,14 +162,14 @@ export default function ImportTimetable() {
             </Button>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color="primary" variant="contained">
               Отмена
             </Button>
             <Button
+              variant="contained"
               type="submit"
               color="primary"
               disabled={exsel.length ? false : true}
-              autoFocus
             >
               Импортировать расписание
             </Button>

@@ -1,0 +1,43 @@
+.chatPage
+    width: 100%
+    display: flex
+    transition: 0.5s
+    margin-top: -52px
+    height: 90vh
+
+.emptyDialog
+    width: 100%
+    height: 100%
+    display: flex
+    justify-content: center
+    align-items: center
+    position: relative
+    & span
+        background-color: #9E9E9E
+        padding: 5px 10px
+        border-radius: 4px
+        color: #fff
+        font-weight: 500
+        font-size: 12px
+
+.fitImage
+    position: absolute
+    width: 40%
+    opacity: 0.1
+
+@media (max-width: 1100px)
+    .fitImage
+        width: 70%
+
+@media (max-width: 700px)
+    .chatPage
+        margin-top: -47px
+        height: 80vh
+
+    .emptyDialog
+        display: none
+
+@media (max-width: 440px)
+    .chatPage
+        margin-top: -32px
+        height: 80vh

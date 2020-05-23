@@ -138,8 +138,8 @@ export default function AddAdditionalForm({ subjects }) {
 
   return (
     <div id="addForm">
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Добавить занятие
+      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
+        Добавить дополнительное занятие
       </Button>
       <Dialog
         open={open}
@@ -291,10 +291,15 @@ export default function AddAdditionalForm({ subjects }) {
             </Button>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} variant="contained" color="secondary">
               Отмена
             </Button>
-            <Button type="submit" color="primary" autoFocus>
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              autoFocus
+            >
               Добавить
             </Button>
           </DialogActions>

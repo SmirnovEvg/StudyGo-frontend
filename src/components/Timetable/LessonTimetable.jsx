@@ -1,5 +1,5 @@
-import "./LessonTimetable.sass";
 import React, { useState, useEffect } from "react";
+import styles from './LessonTimetable.module.sass'
 import { PropTypes } from "prop-types";
 
 import axios from "axios";
@@ -19,6 +19,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import AuthService from "../../services/AuthService";
+import TimetableService from "../../services/TimetableService";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
+
 export default function LessonTimetable({ lesson, teachers, subjects }) {
   const [classroomNumber, setClassroomNumber] = useState("");
   const [hall, setHall] = useState("");
@@ -46,6 +49,8 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
   const [open, setOpen] = React.useState(false);
 
   const classes = useStyles();
+
+  const user = AuthService.getUser();  
 
   useEffect(() => {
     setClassroomNumber(lesson.classroomNumber);
@@ -135,6 +140,8 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
   };
 
   const handleDelete = (chipToDelete) => async () => {
+    console.log(chipToDelete);
+    
     setGroup((chips) => chips.filter((chip) => chip !== chipToDelete));
     groups.length > 1 && setgroupPart("");
   };
@@ -147,20 +154,63 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
     setOpen(true);
   };
 
+  const removeLesson = () => {
+    axios.delete("http://localhost:3333/api/timetable", {
+      data: {
+        id: lesson._id,
+      },
+    });
+    handleClose();
+    window.location.reload(false);
+  };
+
+  const getLessonTypeClass = (type) => {
+    switch (type) {
+      case 0:
+        return styles.lessonTypeLk
+      case 1:
+        return styles.lessonTypeLb
+      case 2:
+        return styles.lessonTypePz
+      default:
+        break;
+    }
+  }
+
   return (
-    <div className="lesson" onDoubleClick={handleOpen}>
-      <div className="lesson__info">
-        <p>{lesson._id}</p>
-        {`${lesson.teacher.secondName} ${lesson.teacher.firstName[0]}. ${lesson.teacher.thirdName[0]}.`}
-        <br />
-        {`${lesson.subject.name}`}
-        <br />
-        {`${lesson.additional}`}
+    <>
+    <Paper elevation={3} className={styles.lesson} onClick={() => handleOpen()}>
+      <div className={styles.lessonMainInfoHeader}>
+        <h6>{lesson.subject.name}</h6>
       </div>
-      <div className="lesson__edit-form">
+      <div>
+        <div className={styles.lessonMainInfo}>
+          <p>{`${lesson.teacher.secondName} ${lesson.teacher.firstName[0]}. ${lesson.teacher.thirdName[0]}.`}</p>
+          <p>{TimetableService.getFullClassTime(lesson.classTime)}</p>
+        </div>
+        <div className={styles.lessonBricks}>
+          <div className={`${styles.lessonType} ${getLessonTypeClass(lesson.type)}`}>{TimetableService.getFullLessonType(lesson.type)}</div>
+          <div className={styles.lessonClassroom}>{lesson.classroomNumber}-{lesson.hall}</div>
+          {!user.role && lesson.additional && <div className={styles.lessonAdd}>Доп</div>}
+          <div className={styles.lessonGroup}>
+            {user.role ? ( 
+              lesson.group.map((group, index) => {
+              return (
+                <div key={index} >
+                  {group}
+                </div>
+              );
+            })): (
+              <></>
+            )}
+          </div>
+        </div>
+      </div>
+    </Paper>
+      {user.role === 2 && <div className="lesson__edit-form">
         <Dialog
           open={open}
-          onClose={handleClose}
+          onClose={() => handleClose()}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -168,7 +218,7 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
             {"Редактировать занятие"}
           </DialogTitle>
           <ValidatorForm
-            onSubmit={() => editTimetable()}
+            onSubmit={editTimetable}
             onError={(errors) => console.log(errors)}
           >
             <DialogContent>
@@ -373,17 +423,20 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
               </FormControl>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button onClick={removeLesson} variant="contained" color="secondary">
+                Удалить
+              </Button>
+              <Button onClick={handleClose} variant="contained" color="secondary">
                 Отмена
               </Button>
-              <Button type="submit" color="primary" autoFocus>
+              <Button type="submit" variant="contained" color="secondary">
                 Изменить
               </Button>
             </DialogActions>
           </ValidatorForm>
         </Dialog>
-      </div>
-    </div>
+      </div>}
+      </>
   );
 }
 

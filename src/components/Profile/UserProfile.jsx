@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import userIsAuthenticatedRedirect from '../wrappers/userIsAuthenticatedRedirect';
+import AuthService from "../../services/AuthService";
 
 import UserStudentProfile from './UserStudentProfile';
 import UserTeacherProfile from './UserTeacherProfile';
@@ -16,18 +17,30 @@ class UserProfile extends Component {
         role: '',
         course: '',
         group: '',
+        groupPart: '',
         department: '',
         rank: '',
+        dialog: '',
     }
     componentDidMount = async () => {
         try {
             let { match: { params } } = this.props;
+            const user = AuthService.getUser();           
 
             const res = await axios.get('http://localhost:3333/api/user/info', {
                 params: {
                     userId: params.id,
                 }
             })
+
+            const dialog = await axios.get('http://localhost:3333/api/chat/dialog/findbyusers', {
+                params: {
+                    userId: params.id,
+                    profileUserId: user._id
+                }
+            })
+            console.log(res.data);
+            
             
             res.data.role ?
                 this.setState({
@@ -38,7 +51,9 @@ class UserProfile extends Component {
                     thirdName: res.data.thirdName,
                     department: res.data.department,
                     rank: res.data.rank,
-                    additionals: res.data.additionals
+                    additionals: res.data.additionals,
+                    subjects: res.data.subjects,
+                    dialog: dialog.data.length && dialog.data[0]._id
                 })
                 :
                 this.setState({
@@ -48,7 +63,9 @@ class UserProfile extends Component {
                     secondName: res.data.secondName,
                     thirdName: res.data.thirdName,
                     course: res.data.course,
-                    group: res.data.group
+                    group: res.data.group,
+                    groupPart: res.data.groupPart,
+                    dialog: dialog.data.length && dialog.data[0]._id
                 })
         } catch (error) {
             console.log(error);
