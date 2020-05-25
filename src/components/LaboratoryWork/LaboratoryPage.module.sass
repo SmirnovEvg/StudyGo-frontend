@@ -1,0 +1,67 @@
+.laboratory
+    &List
+        width: 100%
+        & a 
+            color: #383838
+            text-decoration: none
+    &Page
+        display: flex
+        justify-content: space-between
+
+        &List 
+            width: 300px
+            min-width: 300px
+        &__laboratories
+            width: 75%
+            margin-left: 30px
+
+.listItem
+    & span
+        overflow: hidden
+        text-overflow: ellipsis
+
+.laboratoryLogo
+    width: 100%
+    display: flex
+    justify-content: center
+    opacity: 0.1
+    & svg 
+        width: 50%
+
+
+@media (max-width: 1350px)
+    .laboratoryPage
+        &__laboratories
+            width: 65%
+
+@media (max-width: 1000px)
+    .laboratoryPage
+        &__laboratories
+            width: 60%
+            margin-left: 10px
+
+@media (max-width: 900px)
+    .laboratoryPage
+        &__laboratories
+            width: 55%
+            margin-left: 10px
+
+@media (max-width: 800px)
+    .laboratory
+        &List
+            width: 100%
+            margin-top: 20px
+            & a 
+                color: #383838
+                text-decoration: none
+        &Page
+            flex-wrap: wrap
+            &List 
+                width: 100%
+                min-width: 0
+            &__laboratories
+                margin-top: 20px
+                width: 100%
+                margin-left: 0
+    .laboratoryLogo
+        display: none

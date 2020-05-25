@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import styles from "./Header.module.sass";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -19,6 +20,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { getUreadMessages } from '../../actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,11 +51,20 @@ const mobileOptions = [
 ];
 
 export default function Header({ messageCount, firstName, secondName, role }) {
+  const dispatch = useDispatch();
+  const unreadMessages = useSelector(state => state.unreadMessages);
+
   const classes = useStyles();
   const size = useWindowSize();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [page, setPage] = React.useState(null);
+  
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    dispatch(getUreadMessages(messageCount))
+  }, [dispatch, messageCount, page])
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -83,6 +94,7 @@ export default function Header({ messageCount, firstName, secondName, role }) {
                 to="/events"
                 color="inherit"
                 className={styles.navButton}
+                onClick={() => setPage('event')}
               >
                 {size.width > 800 ? "Новости" : <img src={News} alt="News" />}
               </Button>
@@ -92,12 +104,13 @@ export default function Header({ messageCount, firstName, secondName, role }) {
                 to="/timetable"
                 color="inherit"
                 className={styles.navButton}
+                onClick={() => setPage('timetable')}
               >
                 {size.width > 800 ? (
                   "Расписание"
                 ) : (
-                  <img src={Event} alt="Event" />
-                )}
+                    <img src={Event} alt="Event" />
+                  )}
               </Button>
 
               <Button
@@ -105,9 +118,10 @@ export default function Header({ messageCount, firstName, secondName, role }) {
                 to="/chat"
                 color="inherit"
                 className={styles.navButton}
+                onClick={() => setPage('chat')}
               >
                 <Badge
-                  badgeContent={messageCount}
+                  badgeContent={unreadMessages}
                   max={99}
                   variant="dot"
                   color="error"
@@ -122,63 +136,65 @@ export default function Header({ messageCount, firstName, secondName, role }) {
                     to="/laboratory"
                     color="inherit"
                     className={styles.navButton}
+                    onClick={() => setPage('labs')}
                   >
                     {size.width > 800 ? (
                       "Лабораторные работы"
                     ) : (
-                      <img src={Labs} alt="Labs" />
-                    )}
+                        <img src={Labs} alt="Labs" />
+                      )}
                   </Button>
                 ) : (
-                  <></>
-                )}
+                    <></>
+                  )}
               </>
               <Avatar
                 className={`${classes.red} ${styles.navAvatar}`}
                 component={Link}
                 to="/profile"
+                onClick={() => setPage('profile')}
               >
                 {firstName[0]}
                 {secondName[0]}
               </Avatar>
             </>
           ) : (
-            <>
-              <IconButton
-                aria-label="more"
-                aria-controls="long-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-                size="small"
-              >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={open}
-                onClose={handleClose}
-              >
-                {mobileOptions.map((option) => (
-                  <>
-                    {!role && option.link === "/laboratory" ? (
-                      <></>
-                    ) : (
-                      <MenuItem
-                        component={Link}
-                        to={option.link}
-                        key={option.label}
-                        onClick={handleClose}
-                      >
-                        {option.label}
-                      </MenuItem>
-                    )}
-                  </>
-                ))}
-              </Menu>
-            </>
-          )}
+              <>
+                <IconButton
+                  aria-label="more"
+                  aria-controls="long-menu"
+                  aria-haspopup="true"
+                  onClick={handleClick}
+                  size="small"
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  id="long-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={open}
+                  onClose={handleClose}
+                >
+                  {mobileOptions.map((option) => (
+                    <>
+                      {!role && option.link === "/laboratory" ? (
+                        <></>
+                      ) : (
+                          <MenuItem
+                            component={Link}
+                            to={option.link}
+                            key={option.label}
+                            onClick={handleClose}
+                          >
+                            {option.label}
+                          </MenuItem>
+                        )}
+                    </>
+                  ))}
+                </Menu>
+              </>
+            )}
         </Toolbar>
       </AppBar>
     </div>

@@ -72,7 +72,7 @@ function StudentProfile(props) {
             <h3>{props.studnumber}</h3>
           </div>
           <div className={styles.userLabsInfo}>
-            <h3>{passedLabs && allLabs && (passedLabs * 100) / allLabs}%</h3>
+            <h3>{passedLabs && allLabs && Math.round((passedLabs * 100) / allLabs)}%</h3>
             <p>Процент защищенных лабораторных работ</p>
           </div>
         </div>

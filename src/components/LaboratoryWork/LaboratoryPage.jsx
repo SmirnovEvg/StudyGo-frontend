@@ -1,5 +1,5 @@
-import './LaboratoryPage.sass';
 import React, { useState, useEffect } from 'react';
+import styles from './LaboratoryPage.module.sass';
 import axios from 'axios';
 import {
     Switch
@@ -16,20 +16,23 @@ import userIsTeacherRedirect from '../wrappers/userIsTeacherRedirect';
 import RouteWithSubRoutes from '../RouteWithSubRoutes/RouteWithSubRoutes';
 import { routes } from '../App/App';
 import CreateLaboratory from './CreateLaboratory';
+import { withRouter } from "react-router";
+import { ReactComponent as FITLogo } from "../../static/images/FITLogo.svg";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
 }));
 
-const LaboratoryPage = () => {
+const LaboratoryPage = (props) => {
+    console.log(props);
+
     const classes = useStyles();
     const [laboratoryClasses, setLaboratoryClasses] = useState([]);
     const [teacher, setTeacher] = useState([]);
-    
+
     const laboratoryRoutes = routes.filter(item => {
         return item.path === '/laboratory'
     })
@@ -37,23 +40,23 @@ const LaboratoryPage = () => {
 
     useEffect(() => {
         const getLaboratoryClasses = async () => {
-                const token = AuthService.getToken();
+            const token = AuthService.getToken();
 
             const res = await axios.get('http://localhost:3333/api/user', {
-                    headers: {
-                        Authorization: token
-                    }
-                }) 
-                setTeacher(res.data)
-                
+                headers: {
+                    Authorization: token
+                }
+            })
+            setTeacher(res.data)
 
-        axios.get('http://localhost:3333/api/laboratoryclass/teacher', {
-            params: {
-                teacherId: res.data.userId._id
-            }
-        }).then(res => {
-            setLaboratoryClasses(res.data)
-        })
+
+            axios.get('http://localhost:3333/api/laboratoryclass/teacher', {
+                params: {
+                    teacherId: res.data.userId._id
+                }
+            }).then(res => {
+                setLaboratoryClasses(res.data)
+            })
         }
         getLaboratoryClasses();
     }, []);
@@ -66,34 +69,39 @@ const LaboratoryPage = () => {
 
     return (
         <>
-        <CreateLaboratory teacher={teacher}/>
-        <div className="laboratory-page">
-            <div className={classes.root}>
-                <List component="nav" aria-label="secondary mailbox folder">
-                    {laboratoryClasses && laboratoryClasses.map((item, index) => (
-                        <Link key={index} to={`/laboratory/${item._id}`} onClick={(event) => handleListItemClick(event, item._id)}>
-                            <ListItem
-                                button
-                                selected={selectedIndex === item._id}
-                                onClick={(event) => handleListItemClick(event, item._id)}
-                                key={index}
-                            >
-                                <ListItemText primary={`${item.course} ${item.group} ${item.groupPart} ${item.subject.name}`} />
-                            </ListItem>
-                        </Link>
-                    ))}
-                </List>
+            <CreateLaboratory teacher={teacher} />
+            <div className={styles.laboratoryPage}>
+                <div className={styles.laboratoryPageList}>
+                    <List component="nav" aria-label="main mailbox folder" className={styles.laboratoryList}>
+                        {laboratoryClasses && laboratoryClasses.map((item, index) => (
+                            <Link key={index} to={`/laboratory/${item._id}`} onClick={(event) => handleListItemClick(event, item._id)}>
+                                <ListItem
+                                    button
+                                    selected={selectedIndex === item._id}
+                                    onClick={(event) => handleListItemClick(event, item._id)}
+                                    key={index}
+                                    style={{ whiteSpace: 'nowrap' }}
+                                >
+                                    <ListItemText primary={`${item.course} ${item.group} ${item.groupPart} ${item.subject.name}`} className={styles.listItem} />
+                                </ListItem>
+                            </Link>
+                        ))}
+                    </List>
+                </div>
+                {!props.match.isExact ? (<div className={styles.laboratoryPage__laboratories}>
+                    <Switch>
+                        {laboratoryRoutes[0].routes.map((route, i) => (
+                            <RouteWithSubRoutes key={i} {...route} />
+                        ))}
+                    </Switch>
+                </div>) : (
+                        <div className={styles.laboratoryLogo}>
+                            <FITLogo />
+                        </div>
+                    )}
             </div>
-            <div className="laboratory-page__laboratories">
-                <Switch>
-                    {laboratoryRoutes[0].routes.map((route, i) => (
-                        <RouteWithSubRoutes key={i} {...route} />
-                    ))}
-                </Switch>
-            </div>
-        </div>
         </>
     )
 }
 
-export default userIsTeacherRedirect(LaboratoryPage);
+export default userIsTeacherRedirect(withRouter(LaboratoryPage));

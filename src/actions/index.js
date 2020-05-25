@@ -46,3 +46,25 @@ export const updateEvent = (event) => {
         payload: event
     }
 }
+
+export const getUreadMessages = (messageCount) => {
+    return {
+        type: 'GET_UNREAD_MESSAGES',
+        payload: messageCount
+    }
+}
+
+const unreadMessages = (count) => {
+    return {
+        type: 'CLEAR_UNREAD_MESSAGES',
+        payload: count
+    }
+}
+
+export const clearUreadMessages = (count) => {
+    return(dispatch) => {
+        setTimeout(() => {
+            dispatch(unreadMessages(count))
+        }, 1000);
+    }
+}

@@ -12,6 +12,7 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 export default function AddEvent() {
     const dispatch = useDispatch();
     const [eventName, setEventName] = useState('');
+    const [eventImage, setEventImage] = useState(null);
     const [eventDescription, setEventDescription] = useState('');
     const [open, setOpen] = React.useState(false);
     const changeName = e => {
@@ -20,18 +21,29 @@ export default function AddEvent() {
     const changeDescription = e => {
         setEventDescription(e.target.value)
     }
+
     const addEvent = () => {
-        axios.post('http://localhost:3333/api/event', {
-            name: eventName,
-            description: eventDescription,
-            date: new Date(Date.now())
+        const formData = new FormData();
+        formData.append('file', eventImage);
+        formData.append('name', eventName);
+        formData.append('description', eventDescription);
+        formData.append('date', new Date(Date.now()));
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        axios.post('http://localhost:3333/api/event', formData, config)
+        .then(res => {
+            dispatch(createEvent(res.data))
+            setEventName('');
+            setEventDescription('');
+            handleClose();
         })
-            .then(res => {
-                dispatch(createEvent(res.data))
-                setEventName('');
-                setEventDescription('');
-                handleClose();
-            })
+    }
+
+    const getImage = (e) => {
+        setEventImage(e.target.files[0]);
     }
 
     const handleClickOpen = () => {
@@ -44,10 +56,10 @@ export default function AddEvent() {
 
     return (
         <div>
-        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+            <Button variant="contained" color="primary" onClick={handleClickOpen}>
                 Добавить
             </Button>
-        <Dialog
+            <Dialog
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
@@ -58,36 +70,46 @@ export default function AddEvent() {
                     onSubmit={() => addEvent()}
                     onError={(errors) => console.log(errors)}
                 >
-                <DialogContent>
-            <TextValidator
-                id="standard-name"
-                label="Название"
-                value={eventName}
-                onChange={changeName}
-                margin="normal"
-                validators={['required']}
-                errorMessages={['Это поле обязательно']}
-            />
-            <TextValidator
-                id="standard-name"
-                label="Наполнение"
-                value={eventDescription}
-                onChange={changeDescription}
-                margin="normal"
-                multiline
-                rows={6}
-                validators={['required']}
-                errorMessages={['Это поле обязательно']}
-            />
-            </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                    Отмена
+                    <DialogContent>
+                        <TextValidator
+                            id="standard-name"
+                            label="Название"
+                            value={eventName}
+                            onChange={changeName}
+                            margin="normal"
+                            validators={['required']}
+                            errorMessages={['Это поле обязательно']}
+                        />
+                        <TextValidator
+                            id="standard-name"
+                            label="Наполнение"
+                            value={eventDescription}
+                            onChange={changeDescription}
+                            margin="normal"
+                            multiline
+                            rows={6}
+                            validators={['required']}
+                            errorMessages={['Это поле обязательно']}
+                        />
+                        <Button variant="contained" color="primary" component="label">
+                            Загрузить файл
+                            <input
+                                type="file"
+                                style={{ display: "none" }}
+                                onChange={getImage}
+                                accept="image/*"
+                                name="file"
+                            />
+                        </Button>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} variant="contained" color="primary">
+                            Отмена
                     </Button>
-                    <Button type="submit" color="primary" autoFocus>
-                    Добавить
+                        <Button type="submit" variant="contained" color="primary">
+                            Добавить
                     </Button>
-                </DialogActions>
+                    </DialogActions>
                 </ValidatorForm>
             </Dialog>
         </div>

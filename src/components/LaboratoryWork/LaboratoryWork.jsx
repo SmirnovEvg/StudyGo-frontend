@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import styles from './LaboratoryWork.module.sass'
 import axios from "axios";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,8 +9,20 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import LaboratoryNumber from "./LaboratoryNumber";
+import { makeStyles } from "@material-ui/core/styles";
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: "16px",
+    overflowX: 'auto',
+    display: 'flex',
+    flex: 1
+  },
+}));
 
 const LaboratoryWork = (props) => {
+  const classes = useStyles();
   const [laboratoryClass, setLaboratoryClass] = useState({});
   const [laboratoryWorks, setLaboratoryWorks] = useState([]);
   const [laboratoryTime, setLaboratoryTime] = useState([]);
@@ -150,10 +163,10 @@ const LaboratoryWork = (props) => {
   };
 
   return (
-    <Paper>
-      <Table aria-label="simple table">
+    <Paper elevation={3} className={`${classes.root}`}>
+      <Table aria-label="simple table" className={styles.laboratoryWorkTable}>
         <TableHead key="name">
-          <TableCell>Labs</TableCell>
+          <TableCell>Номер</TableCell>
           {createTableHead()}
         </TableHead>
         <TableBody>

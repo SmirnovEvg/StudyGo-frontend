@@ -1,0 +1,46 @@
+.eventPage 
+    display: flex
+    flex-direction: column
+    align-items: center
+    margin: 0 auto
+    width: 80%
+    color: #707070
+    &__buttons
+        display: flex
+        justify-content: flex-end
+        width: 100%
+    & img
+        width: 65%
+        margin-bottom: 30px
+    & h2 
+        font-size: 75px
+        margin: 0 0 30px 0
+        text-align: center
+    & p 
+        font-weight: 300
+
+@media (max-width: 1000px)
+    .eventPage
+        width: 100%
+        & img
+            width: 100%
+            margin-bottom: 25px
+        & h2 
+            font-size: 65px
+            margin: 0 0 25px 0
+
+@media (max-width: 700px)
+    .eventPage
+        & img
+            margin-bottom: 20px
+        & h2 
+            font-size: 45px
+            margin: 0 0 20px 0
+
+@media (max-width: 400px)
+    .eventPage
+        & img
+            margin-bottom: 10px
+        & h2 
+            font-size: 30px
+            margin: 0 0 10px 0

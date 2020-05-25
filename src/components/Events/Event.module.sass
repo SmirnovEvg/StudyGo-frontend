@@ -1,0 +1,99 @@
+.event
+    &Block
+        display: flex
+        justify-content: center
+        align-items: center
+    &Image
+        width: 250px
+        height: 250px
+        min-width: 250px
+        min-height: 250px
+        border-radius: 50%
+        display: flex
+        justify-content: center
+        align-items: center
+        border: 1px solid #707070
+        margin-left: 50px
+    &Date
+        color: #707070
+        display: flex
+        flex-direction: column
+        justify-content: center
+        text-align: right
+        width: 200px
+        min-width: 200px
+        &Month
+            font-size: 40px
+            font-weight: 900
+        &Day
+            font-size: 80px
+            font-weight: 900
+    &Info
+        color: #707070
+        height: 250px
+        display: flex
+        flex-direction: column
+        justify-content: center
+        margin-left: 50px
+        & h3 
+            font-size: 40px
+            font-weight: 700
+            margin: 0
+        & p 
+            font-weight: 300
+            height: 113px
+            overflow: hidden
+            text-overflow: ellipsis
+            margin: 5px
+
+@media (max-width: 1100px)
+    .event
+        &Image
+            width: 150px
+            height: 150px
+            min-width: 150px
+            min-height: 150px
+            margin-left: 30px
+        &Date
+            width: 150px
+            min-width: 150px
+            &Month
+                font-size: 30px
+            &Day
+                font-size: 60px
+        &Info
+            height: 150px
+            margin-left: 30px
+            & h3 
+                font-size: 23px
+            & p 
+                height: 93px
+
+@media (max-width: 750px)
+    .event
+        &Date
+            display: none
+
+@media (max-width: 600px)
+    .event
+        &Image
+            margin: 0 0 5px 0
+        &Block
+            flex-direction: column
+            justify-content: flex-start
+            margin-bottom: 10px
+            height: 320px
+        &Info
+            align-items: center
+            height: 150px
+            margin: 0
+            & h3 
+                font-size: 23px
+                text-align: center
+            & p 
+                height: 100%
+                display: -webkit-box
+                -webkit-line-clamp: 3
+                -webkit-box-orient: vertical
+                overflow: hidden
+                word-wrap: break-word

@@ -17,8 +17,15 @@ import LaboratoryWork from '../LaboratoryWork/LaboratoryWork';
 import EventsListPage from '../Events/EventsListPage';
 import Main from '../Main/Main';
 import EventPage from '../Events/EventPage';
+import NotFound from '../NotFound/NotFound';
+import General from '../General/General';
 
 export const routes = [
+    {
+        exact: true,
+        path: "/",
+        component: General
+    },
     {
         path: "/auth",
         component: Auth
@@ -69,6 +76,9 @@ export const routes = [
                 component: MessageList
             }
         ]
+    },
+    {
+        component: NotFound
     }
 ];
 

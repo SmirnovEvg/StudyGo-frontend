@@ -84,7 +84,7 @@ export default function CreateLaboratory({teacher}) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="contained" color="primary" onClick={handleClickOpen}>
         Добавить лабораторное занятие
       </Button>
       <Dialog
@@ -181,10 +181,10 @@ export default function CreateLaboratory({teacher}) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} variant="contained" color="primary">
               Отмена
             </Button>
-            <Button type="submit" color="primary" autoFocus>
+            <Button type="submit" variant="contained" color="primary">
               Добавить
             </Button>
           </DialogActions>

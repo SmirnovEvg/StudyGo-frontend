@@ -143,10 +143,7 @@ class Timetable extends Component {
             teacher: this.state.userInfo.userId._id,
           },
         }
-      );
-      console.log(this.state.userInfo.userId._id);
-      console.log(res);
-      
+      );      
 
       if(res.data.length && 
       res.data.filter((item) => item.week === 1).length && 

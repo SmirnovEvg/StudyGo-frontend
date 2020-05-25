@@ -1,0 +1,63 @@
+.notFoundPage
+    width: 100%
+    height: 100%
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    position: relative
+
+    & svg
+        width: 50%
+        position: absolute
+        opacity: 0.1
+
+    & h2
+        font-size: 160px
+        margin: 0
+
+    & p
+        margin: 0 0 20px 0
+        font-weight: 200
+        font-size: 40px
+
+@media (max-width: 1200px)
+    .notFoundPage
+        & svg
+            width: 60%
+
+        & h2
+            font-size: 160px
+
+        & p
+            font-size: 40px
+
+@media (max-width: 900px)
+    .notFoundPage
+        & svg
+            width: 70%
+
+        & h2
+            font-size: 160px
+
+        & p
+            font-size: 40px
+
+@media (max-width: 600px)
+    .notFoundPage
+        & svg
+            width: 100%
+
+        & h2
+            font-size: 140px
+
+        & p
+            font-size: 35px
+
+@media (max-width: 400px)
+    .notFoundPage
+        & h2
+            font-size: 100px
+
+        & p
+            font-size: 25px

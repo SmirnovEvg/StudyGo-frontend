@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styles from './DialogItem.module.sass'
 import axios from 'axios';
+import styles from './DialogItem.module.sass';
 import io from "socket.io-client";
-
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import PropTypes from 'prop-types';
@@ -25,19 +24,20 @@ function DialogItem(props) {
         })
 
         socket.on("unread message", ({ chatMessageUser, dialogId }) => {
-            if(dialogId === props.dialog.id && chatMessageUser === props.dialog.user._id){
-                setUnreadMeassagesCount(unreadMeassagesCount =>  unreadMeassagesCount + 1)
+            if (dialogId === props.dialog.id && chatMessageUser === props.dialog.user._id) {
+                setUnreadMeassagesCount(unreadMeassagesCount => unreadMeassagesCount + 1)
             }
         });
-        
+
     }, [props.dialog])
+
     return (
-        <ListItem 
-            component={Link} 
-            to={`/chat/${props.dialog.id}`} 
+        <ListItem
+            component={Link}
+            to={`/chat/${props.dialog.id}`}
             key={props.dialog.id}
             style={{
-                display: 'flex', 
+                display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '15px 5px',
