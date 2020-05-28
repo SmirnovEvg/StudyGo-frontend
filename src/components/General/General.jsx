@@ -5,6 +5,7 @@ import axios from "axios";
 import Lesson from './Lesson';
 import Event from './Event';
 import styles from './General.module.sass';
+import userIsAuthenticatedRedirect from "../wrappers/userIsAuthenticatedRedirect";
 
 const General = () => {
     const [lessons, setLessons] = useState([]);
@@ -81,4 +82,4 @@ const General = () => {
     )
 }
 
-export default General;
+export default userIsAuthenticatedRedirect(General);

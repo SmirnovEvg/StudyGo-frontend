@@ -14,22 +14,22 @@ export default function DayTimetable(props) {
         6: "Суббота"
     };
     const { weekDay, day, teachers, subjects } = props;
-    
+
     return (
         <div className={styles.day}>
             <h3 key={weekDay}>{weekDays[weekDay + 1]}</h3>
             <div className={styles.lessonsList}>
-                {day.length ? day.map((item, index) => 
-                <LessonTimetable key={index} lesson={item} teachers={teachers} subjects={subjects}/>
+                {day.length ? day.map((item, index) =>
+                    <LessonTimetable key={index} lesson={item} teachers={teachers} subjects={subjects} />
                 ) : (
-                <Paper 
-                    elevation={3} 
-                    className={styles.lesson}
-                    style={{color: '#666'}}
-                >
-                    Занятий нет
-                </Paper>
-                )
+                        <Paper
+                            elevation={3}
+                            className={styles.lesson}
+                            style={{ color: '#666' }}
+                        >
+                            Занятий нет
+                        </Paper>
+                    )
                 }
             </div>
         </div>

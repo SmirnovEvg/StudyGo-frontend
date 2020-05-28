@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './SignIn.module.sass';
 import axios from 'axios';
 import Button from '../Inputs/Button/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -6,9 +7,10 @@ import Switch from '../Inputs/Switch/Switch';
 import AuthService from '../../services/AuthService';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import { withRouter } from "react-router";
+import { Typography } from '@material-ui/core';
 
 class SignIn extends Component {
-    
+
     state = {
         studnumber: '',
         password: '',
@@ -41,25 +43,24 @@ class SignIn extends Component {
         }
     };
 
-    signOut = () => {
-        AuthService.removeTokenUser();
-    }
-
     render() {
         const { studnumber, password, role } = this.state;
         return (
-            <div className="App">
+            <div className={styles.signInForm}>
                 <ValidatorForm
                     ref="form"
                     onSubmit={() => this.signIn(studnumber, password, role)}
                     onError={errors => console.log(errors)}
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
                 >
-                    <FormControlLabel
-                        control={
-                            <Switch checked={role} onChange={this.handleCheck('role')} value="role" />
-                        }
-                        label={role ? 'Преподаватель' : 'Студент'}
-                    />
+                    <div className={styles.signInFormLabel}>
+                        <FormControlLabel
+                            control={
+                                <Switch checked={role} onChange={this.handleCheck('role')} value="role" />
+                            }
+                            label={<Typography style={{ color: '#666', fontWeight: 200, fontSize: '20px' }}>{role ? 'Преподаватель' : 'Студент'}</Typography>}
+                        />
+                    </div>
                     <TextValidator
                         id="standard-name"
                         label="Студенческий"
@@ -86,13 +87,6 @@ class SignIn extends Component {
                         type="submit"
                     >
                         Войти
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={this.signOut}
-                    >
-                        Выйти
                     </Button>
                 </ValidatorForm>
             </div>

@@ -5,6 +5,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '../Inputs/Switch/Switch';
 import AuthService from '../../services/AuthService';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import styles from './SignUp.module.sass';
+import { Typography } from '@material-ui/core';
 
 class SignUp extends Component {
     state = {
@@ -52,55 +54,58 @@ class SignUp extends Component {
     render() {
         const { studnumber, password, confirmPassword, role } = this.state;
         return (
-            <div className="App">
+            <div className={styles.signUpForm}>
                 <ValidatorForm
                     onSubmit={() => this.signUp(studnumber, password, confirmPassword, role)}
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
                 >
-                <FormControlLabel
-                    control={
-                        <Switch checked={role} onChange={this.handleCheck('role')} value="role" />
-                    }
-                    label={role ? 'Преподаватель' : 'Студент'}
-                />
-                <TextValidator
-                    id="standard-name"
-                    label="Студенческий"
-                    onChange={this.handleChange('studnumber')}
-                    margin="normal"
-                    value={studnumber}
-                    validators={['required', 'isNumber', 'minNumber: 10000000', 'maxNumber: 99999999']}
-                    errorMessages={['Это поле обязательно', 'Некорректное число', 'Некорректное число', 'Некорректное число']}
-                />
-                <TextValidator
-                    id="standard-password-input"
-                    label="Пароль"
-                    type="password"
-                    autoComplete="current-password"
-                    margin="normal"
-                    onChange={this.handleChange('password')}
-                    value={password}
-                    validators={['required', 'minStringLength: 6']}
-                    errorMessages={['Это поле обязательно', 'Пароль слишком мал']}
-                />
-                <TextValidator
-                    id="standard-confirm-password-input"
-                    label="Подтвердите пароль"
-                    type="password"
-                    autoComplete="current-password"
-                    margin="normal"
-                    onChange={this.handleChange('confirmPassword')}
-                    value={confirmPassword}
-                    validators={['required', 'isPasswordMatch']}
-                    errorMessages={['Это поле обязательно', 'Пароли не совпадают']}
-                />
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                >
-                    Зарегистрироваться
+                    <div className={styles.signUpFormLabel}>
+                        <FormControlLabel
+                            control={
+                                <Switch checked={role} onChange={this.handleCheck('role')} value="role" />
+                            }
+                            label={<Typography style={{ color: '#666', fontWeight: 200, fontSize: '20px' }}>{role ? 'Преподаватель' : 'Студент'}</Typography>}
+                        />
+                    </div>
+                    <TextValidator
+                        id="standard-name"
+                        label="Студенческий"
+                        onChange={this.handleChange('studnumber')}
+                        margin="normal"
+                        value={studnumber}
+                        validators={['required', 'isNumber', 'minNumber: 10000000', 'maxNumber: 99999999']}
+                        errorMessages={['Это поле обязательно', 'Некорректное число', 'Некорректное число', 'Некорректное число']}
+                    />
+                    <TextValidator
+                        id="standard-password-input"
+                        label="Пароль"
+                        type="password"
+                        autoComplete="current-password"
+                        margin="normal"
+                        onChange={this.handleChange('password')}
+                        value={password}
+                        validators={['required', 'minStringLength: 6']}
+                        errorMessages={['Это поле обязательно', 'Пароль слишком мал']}
+                    />
+                    <TextValidator
+                        id="standard-confirm-password-input"
+                        label="Подтвердите пароль"
+                        type="password"
+                        autoComplete="current-password"
+                        margin="normal"
+                        onChange={this.handleChange('confirmPassword')}
+                        value={confirmPassword}
+                        validators={['required', 'isPasswordMatch']}
+                        errorMessages={['Это поле обязательно', 'Пароли не совпадают']}
+                    />
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        type="submit"
+                    >
+                        Зарегистрироваться
                     </Button>
-                    </ValidatorForm>
+                </ValidatorForm>
             </div >
         );
     }
