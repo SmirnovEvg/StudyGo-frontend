@@ -1,7 +1,6 @@
 .timetableContainer
     display: flex
     flex-wrap: wrap
-    justify-content: space-between
 
 .generalPage
     & h2 
@@ -13,3 +12,8 @@
 .newsContainer
     display: flex
     justify-content: space-between
+    flex-wrap: wrap
+
+@media (max-width: 1179px)
+    .timetableContainer
+        justify-content: space-between

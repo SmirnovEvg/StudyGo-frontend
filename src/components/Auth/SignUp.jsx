@@ -7,13 +7,21 @@ import AuthService from '../../services/AuthService';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import styles from './SignUp.module.sass';
 import { Typography } from '@material-ui/core';
+import Notification from '../Inputs/Notification/Notification';
 
 class SignUp extends Component {
     state = {
         studnumber: '',
         password: '',
         confirmPassword: '',
-        role: false
+        role: false,
+        errorAlert: false,
+    }
+
+    closeErrorAlert = () => {
+        this.setState({
+            errorAlert: true
+        })
     }
 
     componentDidMount() {
@@ -47,12 +55,19 @@ class SignUp extends Component {
             })
             AuthService.setTokenUser(res.data.token, res.data.user);
         } catch (error) {
-            console.log(error);
+            this.setState({
+                errorAlert: true
+            });
+            setTimeout(() => {
+                this.setState({
+                    errorAlert: false
+                });
+            }, 6000)
         }
     }
 
     render() {
-        const { studnumber, password, confirmPassword, role } = this.state;
+        const { studnumber, password, confirmPassword, role, errorAlert } = this.state;
         return (
             <div className={styles.signUpForm}>
                 <ValidatorForm
@@ -106,6 +121,7 @@ class SignUp extends Component {
                         Зарегистрироваться
                     </Button>
                 </ValidatorForm>
+                <Notification alertOpen={errorAlert} type="error" text="Пользователь не найден"/>
             </div >
         );
     }

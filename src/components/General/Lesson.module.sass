@@ -8,7 +8,9 @@
     height: 140px
     max-width: 31%
     min-width: 31%
-    margin-right: 20px
+    margin-left: 3.5%
+    &:first-child
+        margin-left: 0
         
     &MainInfo
         color: #666
@@ -81,3 +83,15 @@
             background-color: #FF824B
             color: #fff
 
+
+@media (max-width: 1179px)
+    .lesson
+        max-width: 48%
+        min-width: 48%
+        margin-left: 0
+
+@media (max-width: 700px)
+    .lesson
+        max-width: 100%
+        min-width: 100%
+        height: auto

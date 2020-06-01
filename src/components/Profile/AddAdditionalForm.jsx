@@ -138,7 +138,7 @@ export default function AddAdditionalForm({ subjects }) {
 
   return (
     <div id="addForm">
-      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
+      <Button variant="contained" color="secondary" onClick={handleClickOpen} style={{marginLeft: 0}}>
         Добавить дополнительное занятие
       </Button>
       <Dialog

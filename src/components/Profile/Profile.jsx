@@ -10,7 +10,7 @@ import StudentProfile from "./StudentProfile";
 import TeacherProfile from "./TeacherProfile";
 import { withRouter } from "react-router";
 
-function Profile(props) {  
+function Profile(props) {
   const [studnumber, setStudnumber] = useState("");
   const [firstName, setFirstName] = useState("");
   const [secondName, setSecondName] = useState("");
@@ -23,7 +23,9 @@ function Profile(props) {
   const [rank, setRank] = useState("");
   const [additionals, setAdditional] = useState([]);
   const [subjects, setSubject] = useState([]);
+  const [subjectList, setSubjectList] = useState([]);
   const [studentId, setStudentId] = useState("");
+  const [teacherInfo, setTeacherInfo] = useState({})
 
   const dispatch = useDispatch();
 
@@ -37,7 +39,14 @@ function Profile(props) {
           headers: {
             Authorization: token,
           },
-        });       
+        });
+        console.log(res.data);
+        
+
+        const subjectList = await axios.get(
+          "http://localhost:3333/api/subject", {}
+        );
+        setSubjectList(subjectList.data)
 
         switch (res.data.userId.role) {
           case 0:
@@ -62,6 +71,7 @@ function Profile(props) {
             setRank(res.data.rank);
             setAdditional(res.data.additionals);
             setSubject(res.data.subjects);
+            setTeacherInfo(user.userId);
             dispatch(getAdditionals(res.data.additionals));
             break;
           case 2:
@@ -74,6 +84,7 @@ function Profile(props) {
             setRank(res.data.rank);
             setAdditional(res.data.additionals);
             setSubject(res.data.subjects);
+            setTeacherInfo(user.userId);
             dispatch(getAdditionals(res.data.additionals));
             break;
 
@@ -87,7 +98,7 @@ function Profile(props) {
     getUser();
   }, [dispatch]);
 
-  
+
 
   return (
     <div>
@@ -102,20 +113,22 @@ function Profile(props) {
           rank={rank}
           additionals={additionals}
           subjects={subjects}
+          subjectList={subjectList}
+          teacherInfo={teacherInfo}
         />
       ) : (
-        <StudentProfile
-          studentId={studentId}
-          studnumber={studnumber}
-          role={role}
-          firstName={firstName}
-          secondName={secondName}
-          thirdName={thirdName}
-          course={course}
-          group={group}
-          groupPart={groupPart}
-        />
-      )}
+          <StudentProfile
+            studentId={studentId}
+            studnumber={studnumber}
+            role={role}
+            firstName={firstName}
+            secondName={secondName}
+            thirdName={thirdName}
+            course={course}
+            group={group}
+            groupPart={groupPart}
+          />
+        )}
     </div>
   );
 }

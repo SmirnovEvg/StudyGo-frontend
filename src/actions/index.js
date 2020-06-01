@@ -54,17 +54,9 @@ export const getUreadMessages = (messageCount) => {
     }
 }
 
-const unreadMessages = (count) => {
+export const clearUreadMessages = (count) => {
     return {
         type: 'CLEAR_UNREAD_MESSAGES',
         payload: count
-    }
-}
-
-export const clearUreadMessages = (count) => {
-    return(dispatch) => {
-        setTimeout(() => {
-            dispatch(unreadMessages(count))
-        }, 1000);
     }
 }

@@ -6,6 +6,7 @@ import { withRouter } from "react-router";
 import axios from "axios";
 import { PropTypes } from "prop-types";
 import AddAdditionalForm from "./AddAdditionalForm";
+import ChangeSubjectList from "./ChangeSubjectList";
 import Button from "../Inputs/Button/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { removeAdditional } from "../../actions";
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TeachertProfile(props) {
+  
   const classes = useStyles();
   const additionals = useSelector((state) => state.Additionals);
   const dispatch = useDispatch();
@@ -60,10 +62,13 @@ function TeachertProfile(props) {
         </div>
       </Paper>
       <Paper elevation={3} className={`${classes.root} ${styles.subjectList}`}>
-        <h2>Преподаваемые дисциплины</h2>
-        {props.subjects.map((subject) => {
-          return <p key={subject._id}>{subject.name}</p>;
-        })}
+        <div>
+          <h2>Преподаваемые дисциплины</h2>
+          {props.subjects.map((subject) => {
+            return <p key={subject._id}>{subject.name}</p>;
+          })}
+        </div>
+        <ChangeSubjectList subjects={props.subjects} subjectList={props.subjectList} teacherInfo={props.teacherInfo}/>
       </Paper>
       <div className={styles.additionalsContainer}>
         <AddAdditionalForm subjects={props.subjects} />

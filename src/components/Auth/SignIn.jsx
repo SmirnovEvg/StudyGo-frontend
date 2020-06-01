@@ -8,13 +8,21 @@ import AuthService from '../../services/AuthService';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import { withRouter } from "react-router";
 import { Typography } from '@material-ui/core';
+import Notification from '../Inputs/Notification/Notification';
 
 class SignIn extends Component {
 
     state = {
         studnumber: '',
         password: '',
-        role: false
+        role: false,
+        errorAlert: false,
+    }
+
+    closeErrorAlert = () => {
+        this.setState({
+            errorAlert: true
+        })
     }
 
     handleChange = name => event => {
@@ -39,12 +47,19 @@ class SignIn extends Component {
             this.props.history.push('/');
             window.location.reload(false);
         } catch (error) {
-            console.log(error);
+            this.setState({
+                errorAlert: true
+            });
+            setTimeout(() => {
+                this.setState({
+                    errorAlert: false
+                });
+            }, 6000)
         }
     };
 
     render() {
-        const { studnumber, password, role } = this.state;
+        const { studnumber, password, role, errorAlert } = this.state;
         return (
             <div className={styles.signInForm}>
                 <ValidatorForm
@@ -89,6 +104,7 @@ class SignIn extends Component {
                         Войти
                     </Button>
                 </ValidatorForm>
+                <Notification alertOpen={errorAlert} type="error" text="Неверный логин или пароль"/>
             </div>
         );
     }

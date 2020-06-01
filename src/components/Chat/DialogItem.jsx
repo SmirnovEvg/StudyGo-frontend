@@ -6,10 +6,15 @@ import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import PropTypes from 'prop-types';
 import ListItem from '@material-ui/core/ListItem';
+import { useDispatch } from 'react-redux';
+import {clearUreadMessages} from '../../actions'
 
 const socket = io.connect("http://localhost:5000");
 
 function DialogItem(props) {
+    console.log(props);
+    
+    const dispatch = useDispatch()
     const dialogId = props.location.pathname.split('/')[2];
 
     const [unreadMeassagesCount, setUnreadMeassagesCount] = useState(0)
@@ -29,13 +34,19 @@ function DialogItem(props) {
             }
         });
 
-    }, [props.dialog])
+    }, [props.dialog]);
+
+    const clearUreadMessagesCount = () => {
+        dispatch(clearUreadMessages(unreadMeassagesCount))
+        setUnreadMeassagesCount(0);
+    }
 
     return (
         <ListItem
             component={Link}
             to={`/chat/${props.dialog.id}`}
             key={props.dialog.id}
+            onClick={clearUreadMessagesCount}
             style={{
                 display: 'flex',
                 justifyContent: 'space-between',

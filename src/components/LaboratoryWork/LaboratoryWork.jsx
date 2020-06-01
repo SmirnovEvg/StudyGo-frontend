@@ -26,7 +26,7 @@ const LaboratoryWork = (props) => {
   const [laboratoryClass, setLaboratoryClass] = useState({});
   const [laboratoryWorks, setLaboratoryWorks] = useState([]);
   const [laboratoryTime, setLaboratoryTime] = useState([]);
-  
+
   let {
     match: { params },
   } = props;
@@ -71,7 +71,7 @@ const LaboratoryWork = (props) => {
               },
             }
           );
-          
+
           setLaboratoryTime(labTime.data);
         } catch (error) {
           console.log(error);
@@ -141,22 +141,24 @@ const LaboratoryWork = (props) => {
         });
         lab[0]
           ? line.push(
-              <TableCell key={generateNotificationID()}>
-                <TextField
-                  defaultValue={lab[0].passed}
-                  onBlur={editLaboratoryWork(lab[0]._id, lab[0].passed)}
-                />
-              </TableCell>
-            )
+            <TableCell key={generateNotificationID()}>
+              <TextField
+                defaultValue={lab[0].passed}
+                inputProps={{style: { textAlign: 'center' }}}
+                onBlur={editLaboratoryWork(lab[0]._id, lab[0].passed)}
+              />
+            </TableCell>
+          )
           : line.push(
-              <TableCell key={generateNotificationID()}>
-                <TextField
-                  defaultValue="-"
-                  onBlur={setLaboratoryWork(studentId, i)}
-                  onFocus={clearInput}
-                />
-              </TableCell>
-            );
+            <TableCell key={generateNotificationID()}>
+              <TextField
+                defaultValue="-"
+                inputProps={{style: { textAlign: 'center' }}}
+                onBlur={setLaboratoryWork(studentId, i)}
+                onFocus={clearInput}
+              />
+            </TableCell>
+          );
       }
     }
     return line;
@@ -166,7 +168,7 @@ const LaboratoryWork = (props) => {
     <Paper elevation={3} className={`${classes.root}`}>
       <Table aria-label="simple table" className={styles.laboratoryWorkTable}>
         <TableHead key="name">
-          <TableCell>Номер</TableCell>
+          <TableCell style={{borderBottom: '1px solid #000'}}>Номер</TableCell>
           {createTableHead()}
         </TableHead>
         <TableBody>
@@ -174,7 +176,7 @@ const LaboratoryWork = (props) => {
             laboratoryClass.students &&
             laboratoryClass.students.map((item, i) => (
               <TableRow key={i}>
-                <TableCell key={i}>{item.userId.secondName}</TableCell>
+                <TableCell key={i} style={{ whiteSpace: 'nowrap' }}>{`${item.userId.secondName} ${item.userId.firstName[0]}.`}</TableCell>
                 {createStudentLine && createStudentLine(item._id)}
               </TableRow>
             ))}

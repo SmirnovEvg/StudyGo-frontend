@@ -13,6 +13,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Notification from '../Inputs/Notification/Notification';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -37,6 +38,7 @@ export default function ImportTimetable() {
   const [exsel, setExsel] = useState([]);
   const [course, setCourse] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [errorAlert, setErrorAlert] = React.useState(false)
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -87,32 +89,40 @@ export default function ImportTimetable() {
   };
 
   const setNewExcel = async () => {
-    if (exsel.length) {
-      await axios.delete("http://localhost:3333/api/timetable/clear", {
-        data: {
-          course,
-        },
-      });
-      for (let i = 0; i < exsel.length; i++) {
-        const element = exsel[i];
-        await axios.post("http://localhost:3333/api/timetable", {
-          teacher: element.teacher,
-          subject: element.subject,
-          classroomNumber: element.classroomNumber,
-          hall: element.hall,
-          week: element.week,
-          dayOfTheWeek: element.dayOfTheWeek,
-          classTime: element.classTime,
-          type: element.type,
-          group: element.group,
-          course: element.course,
-          groupPart: element.groupPart,
-          additional: element.additional,
+    try {
+      if (exsel.length) {
+        await axios.delete("http://localhost:3333/api/timetable/clear", {
+          data: {
+            course,
+          },
         });
+        for (let i = 0; i < exsel.length; i++) {
+          const element = exsel[i];
+          await axios.post("http://localhost:3333/api/timetable/import", {
+            teacher: element.teacher,
+            subject: element.subject,
+            classroomNumber: element.classroomNumber,
+            hall: element.hall,
+            week: element.week,
+            dayOfTheWeek: element.dayOfTheWeek,
+            classTime: element.classTime,
+            type: element.type,
+            group: element.group,
+            course: element.course,
+            groupPart: element.groupPart,
+            additional: element.additional,
+          });
+        }
+        handleClose();
+        window.location.reload(false);
       }
-      handleClose();
-      window.location.reload(false);
+    } catch (error) {
+      setErrorAlert(true)
+      setTimeout(() => {
+        setErrorAlert(false);
+      }, 6000)
     }
+
   };
 
   const changeCourse = (e) => {
@@ -176,6 +186,7 @@ export default function ImportTimetable() {
           </DialogActions>
         </ValidatorForm>
       </Dialog>
+      <Notification alertOpen={errorAlert} type="error" text="Ошибка импорта. Проверьте Exsel-файл" />
     </div>
   );
 }

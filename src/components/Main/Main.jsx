@@ -35,8 +35,6 @@ const Main = (props) => {
       ) : (
           <PreLoader />
         )}
-
-
     </div>
   );
 };

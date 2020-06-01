@@ -55,7 +55,7 @@ export default function LaboratoryNumber(props) {
     }    
 
     return (
-        <TableCell key={props.number}>
+        <TableCell key={props.number} style={{borderBottom: '1px solid #000'}}>
             <MuiThemeProvider>
                 <DPDialog
                     id="dialog"

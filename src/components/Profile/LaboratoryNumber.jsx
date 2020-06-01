@@ -32,7 +32,7 @@ export default function LaboratoryNumber(props) {
   };
 
   return (
-    <TableCell key={props.number} className={styles.timetableHeadNumber}>
+    <TableCell key={props.number} className={styles.timetableHeadNumber} style={{borderBottom: '1px solid #000'}}>
       <Tooltip
         key={generateNotificationID()}
         open={open}

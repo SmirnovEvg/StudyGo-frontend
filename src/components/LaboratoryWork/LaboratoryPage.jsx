@@ -8,7 +8,6 @@ import {
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from "@material-ui/core/styles";
 import { Link } from 'react-router-dom';
 
 import AuthService from '../../services/AuthService';
@@ -19,17 +18,7 @@ import CreateLaboratory from './CreateLaboratory';
 import { withRouter } from "react-router";
 import { ReactComponent as FITLogo } from "../../static/images/FITLogo.svg";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        backgroundColor: theme.palette.background.paper,
-    },
-}));
-
 const LaboratoryPage = (props) => {
-    console.log(props);
-
-    const classes = useStyles();
     const [laboratoryClasses, setLaboratoryClasses] = useState([]);
     const [teacher, setTeacher] = useState([]);
 
@@ -82,7 +71,7 @@ const LaboratoryPage = (props) => {
                                     key={index}
                                     style={{ whiteSpace: 'nowrap' }}
                                 >
-                                    <ListItemText primary={`${item.course} ${item.group} ${item.groupPart} ${item.subject.name}`} className={styles.listItem} />
+                                    <ListItemText primary={`${item.course}-${item.group}/${item.groupPart} ${item.subject.name}`} className={styles.listItem} />
                                 </ListItem>
                             </Link>
                         ))}

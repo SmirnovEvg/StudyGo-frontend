@@ -19,6 +19,7 @@ function StudentProfile(props) {
   const classes = useStyles();
   const [allLabs, setAllLabs] = useState(0);
   const [passedLabs, setPassedLabs] = useState(0);
+  const [allLabsDialog, setAllLabsDialog] = useState(false);
   useEffect(() => {
     const getAllLaboratories = async () => {
       await axios
@@ -56,6 +57,10 @@ function StudentProfile(props) {
     window.location.reload(false);
   };
 
+  const toggleHover = () => {
+    setAllLabsDialog(!allLabsDialog)
+  }
+
   return (
     <div className={styles.profileContent}>
       <StudentLaboratories />
@@ -72,8 +77,17 @@ function StudentProfile(props) {
             <h3>{props.studnumber}</h3>
           </div>
           <div className={styles.userLabsInfo}>
-            <h3>{passedLabs && allLabs && Math.round((passedLabs * 100) / allLabs)}%</h3>
+            <p>{passedLabs}/{allLabs}</p>
+            <h3
+              onMouseEnter={toggleHover}
+              onMouseLeave={toggleHover}
+            >
+              {passedLabs && allLabs && Math.round((passedLabs * 100) / allLabs)}%
+            </h3>
             <p>Процент защищенных лабораторных работ</p>
+            <Paper elevation={3} className={styles.allLabs} style={allLabsDialog ? { opacity: 0 } : { opacity: 0 }}>
+              fef
+            </Paper>
           </div>
         </div>
         <div className={styles.userGroupInfo}>
