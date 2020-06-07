@@ -27,7 +27,7 @@ export default function StudentLaboratoryWork(props) {
       if (props.laboratoryId) {
         try {
           const labClass = await axios.get(
-            "http://localhost:3333/api/laboratoryclass",
+            "http://localhost:3333/api/laboratoryclass/",
             {
               params: {
                 classId: props.laboratoryId,
@@ -44,7 +44,7 @@ export default function StudentLaboratoryWork(props) {
           setLaboratoryClass(labClass.data[0]);
 
           const lab = await axios.get(
-            "http://localhost:3333/api/laboratory/student",
+            "http://localhost:3333/api/laboratory/student/",
             {
               params: {
                 laboratoryClass: props.laboratoryId,
@@ -56,7 +56,7 @@ export default function StudentLaboratoryWork(props) {
           setLaboratoryWorks(lab.data);
 
           const labTime = await axios.get(
-            "http://localhost:3333/api/laboratorytime",
+            "http://localhost:3333/api/laboratorytime/",
             {
               params: {
                 laboratoryClass: props.laboratoryId,
@@ -109,7 +109,8 @@ export default function StudentLaboratoryWork(props) {
                 key={generateNotificationID()}
                 className={styles.labNumber}
               >
-                <p>{lab[0].passed}</p>
+                {lab[0].passed ? <p>{lab[0].passed}</p> : ''}
+                {lab[0].visit ? <p>{lab[0].visit}</p> : ''}
               </TableCell>
             )
           : line.push(

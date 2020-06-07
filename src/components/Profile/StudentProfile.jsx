@@ -24,7 +24,7 @@ function StudentProfile(props) {
     const getAllLaboratories = async () => {
       await axios
         .get(
-          "http://localhost:3333/api/laboratoryclass/allstudentlaboratories",
+          "http://localhost:3333/api/laboratoryclass/allstudentlaboratories/",
           {
             params: {
               studentId: props.studentId,
@@ -37,7 +37,7 @@ function StudentProfile(props) {
 
       await axios
         .get(
-          "http://localhost:3333/api/laboratory/allpassedstudentlaboratories",
+          "http://localhost:3333/api/laboratory/allpassedstudentlaboratories/",
           {
             params: {
               studentId: props.studentId,

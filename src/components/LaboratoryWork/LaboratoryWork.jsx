@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import LaboratoryNumber from "./LaboratoryNumber";
 import { makeStyles } from "@material-ui/core/styles";
+import EditLaboratoryWork from "./EditLaboratoryWork";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +27,7 @@ const LaboratoryWork = (props) => {
   const [laboratoryClass, setLaboratoryClass] = useState({});
   const [laboratoryWorks, setLaboratoryWorks] = useState([]);
   const [laboratoryTime, setLaboratoryTime] = useState([]);
+  const [isPassed, setIsPassed] = useState(false);
 
   let {
     match: { params },
@@ -36,7 +38,7 @@ const LaboratoryWork = (props) => {
       if (params.laboratoryId) {
         try {
           const labClass = await axios.get(
-            "http://localhost:3333/api/laboratoryclass",
+            "http://localhost:3333/api/laboratoryclass/",
             {
               params: {
                 classId: params.laboratoryId,
@@ -56,7 +58,7 @@ const LaboratoryWork = (props) => {
           labClass.data[0].students.sort(compare);
           setLaboratoryClass(labClass.data[0]);
 
-          const lab = await axios.get("http://localhost:3333/api/laboratory", {
+          const lab = await axios.get("http://localhost:3333/api/laboratory/", {
             params: {
               laboratoryClass: params.laboratoryId,
             },
@@ -64,7 +66,7 @@ const LaboratoryWork = (props) => {
           setLaboratoryWorks(lab.data);
 
           const labTime = await axios.get(
-            "http://localhost:3333/api/laboratorytime",
+            "http://localhost:3333/api/laboratorytime/",
             {
               params: {
                 laboratoryClass: params.laboratoryId,
@@ -79,18 +81,7 @@ const LaboratoryWork = (props) => {
       }
     };
     getLabs();
-  }, [params.laboratoryId]);
-
-  const editLaboratoryWork = (id, passed) => (e) => {
-    if (e.target.value && e.target.value <= 10 && e.target.value > 0) {
-      axios.put("http://localhost:3333/api/laboratory", {
-        laboratoryId: id,
-        passed: e.target.value,
-      });
-    } else {
-      e.target.value = passed;
-    }
-  };
+  }, [isPassed, params.laboratoryId]);
 
   const setLaboratoryWork = (student, number) => (e) => {
     if (e.target.value && e.target.value <= 10 && e.target.value > 0) {
@@ -99,7 +90,42 @@ const LaboratoryWork = (props) => {
         student,
         number,
         passed: e.target.value,
+        visit: '',
+        description: '',
       });
+      setIsPassed(!isPassed);
+    } else {
+      e.target.value = "-";
+    }
+  };
+
+  const setLaboratoryWorkVisit = (student, number) => (e) => {
+    if (e.target.value) {
+      axios.post("http://localhost:3333/api/laboratory/visit", {
+        laboratoryclass: laboratoryClass._id,
+        student,
+        number,
+        passed: '',
+        visit: e.target.value,
+        description: '',
+      });
+      setIsPassed(!isPassed);
+    } else {
+      e.target.value = "-";
+    }
+  };
+
+  const setLaboratoryWorkDescription = (student, number) => (e) => {
+    if (e.target.value) {
+      axios.post("http://localhost:3333/api/laboratory/description", {
+        laboratoryclass: laboratoryClass._id,
+        student,
+        number,
+        passed: '',
+        visit: '',
+        description: e.target.value,
+      });
+      setIsPassed(!isPassed);
     } else {
       e.target.value = "-";
     }
@@ -139,27 +165,58 @@ const LaboratoryWork = (props) => {
         let lab = laboratoryWorks.filter((item) => {
           return item.student._id === studentId && item.number === i;
         });
+
         lab[0]
           ? line.push(
             <TableCell key={generateNotificationID()}>
-              <TextField
-                defaultValue={lab[0].passed}
-                inputProps={{style: { textAlign: 'center' }}}
-                onBlur={editLaboratoryWork(lab[0]._id, lab[0].passed)}
-              />
+              <EditLaboratoryWork lab={lab[0]} clearInput={clearInput} />
             </TableCell>
           )
           : line.push(
             <TableCell key={generateNotificationID()}>
               <TextField
                 defaultValue="-"
-                inputProps={{style: { textAlign: 'center' }}}
+                inputProps={{ style: { textAlign: 'center' } }}
                 onBlur={setLaboratoryWork(studentId, i)}
+                onFocus={clearInput}
+              />
+              <TextField
+                defaultValue="-"
+                inputProps={{ style: { textAlign: 'center' } }}
+                onBlur={setLaboratoryWorkVisit(studentId, i)}
+                onFocus={clearInput}
+              />
+              <TextField
+                defaultValue="-"
+                inputProps={{ style: { textAlign: 'center' } }}
+                onBlur={setLaboratoryWorkDescription(studentId, i)}
                 onFocus={clearInput}
               />
             </TableCell>
           );
       }
+      let labList = laboratoryWorks.filter((item) => {
+        return item.student._id === studentId && item.number !== 0 && item.passed !== 0;
+      });
+      const visitCount = laboratoryWorks.filter((item) => {
+        return item.student._id === studentId && item.visit;
+      }).length;
+      let labSum = 0;
+      for (let j = 0; j < labList.length; j++) {
+        labSum += labList[j].passed;
+      }
+      const labAverage = labSum / labList.length;
+      line.push(
+        <TableCell key={generateNotificationID()} style={{ verticalAlign: 'top' }}>
+          <p>
+            {labAverage ? labAverage.toFixed(1) : 0}
+          </p>
+          <p>
+            {visitCount ? visitCount : 0}
+          </p>
+        </TableCell>
+      )
+
     }
     return line;
   };
@@ -168,7 +225,7 @@ const LaboratoryWork = (props) => {
     <Paper elevation={3} className={`${classes.root}`}>
       <Table aria-label="simple table" className={styles.laboratoryWorkTable}>
         <TableHead key="name">
-          <TableCell style={{borderBottom: '1px solid #000'}}>Номер</TableCell>
+          <TableCell style={{ borderBottom: '1px solid #000' }}>Номер</TableCell>
           {createTableHead()}
         </TableHead>
         <TableBody>
