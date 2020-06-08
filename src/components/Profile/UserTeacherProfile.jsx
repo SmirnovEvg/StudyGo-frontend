@@ -6,15 +6,18 @@ import { PropTypes } from "prop-types";
 import TimetableService from "../../services/TimetableService";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      padding: "36px",
-    },
-  }));
+  root: {
+    padding: "36px",
+  },
+}));
 export default function UserTeachertProfile(props) {
+
   const classes = useStyles();
+
   return (
     <div className={styles.profileContent}>
       <Paper elevation={3} className={`${classes.root} ${styles.userInfo}`}>
+        <div className={styles.userPhoto} style={props.image ? { background: `url(/uploads/${props.image}) no-repeat center center / cover` } : { display: 'none' }}></div>
         <div className={styles.userGroupInfo}>
           <p>Фамилия</p>
           <h3>{props.secondName}</h3>

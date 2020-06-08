@@ -21,11 +21,12 @@ class UserProfile extends Component {
         department: '',
         rank: '',
         dialog: '',
+        image: ''
     }
     componentDidMount = async () => {
         try {
             let { match: { params } } = this.props;
-            const user = AuthService.getUser();           
+            const user = AuthService.getUser();
 
             const res = await axios.get('http://localhost:3333/api/user/info', {
                 params: {
@@ -39,9 +40,7 @@ class UserProfile extends Component {
                     profileUserId: user._id
                 }
             })
-            console.log(res.data);
-            
-            
+
             res.data.role ?
                 this.setState({
                     id: params.id,
@@ -53,7 +52,8 @@ class UserProfile extends Component {
                     rank: res.data.rank,
                     additionals: res.data.additionals,
                     subjects: res.data.subjects,
-                    dialog: dialog.data.length && dialog.data[0]._id
+                    dialog: dialog.data.length && dialog.data[0]._id,
+                    image: res.data.image,
                 })
                 :
                 this.setState({
@@ -65,7 +65,7 @@ class UserProfile extends Component {
                     course: res.data.course,
                     group: res.data.group,
                     groupPart: res.data.groupPart,
-                    dialog: dialog.data.length && dialog.data[0]._id
+                    dialog: dialog.data.length && dialog.data[0]._id,
                 })
         } catch (error) {
             console.log(error);

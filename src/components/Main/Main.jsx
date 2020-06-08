@@ -11,7 +11,6 @@ const Main = (props) => {
   const user = AuthService.getUser();
   const isLoad = useSelector(state => state.isLoad);
 
-
   useEffect(() => {
     if (user) {
       axios

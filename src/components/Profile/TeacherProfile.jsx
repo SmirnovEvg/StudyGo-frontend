@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./TeacherProfile.module.sass";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -12,18 +12,27 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeAdditional } from "../../actions";
 import AuthService from "../../services/AuthService";
 import TimetableService from "../../services/TimetableService";
+import IconButton from '@material-ui/core/IconButton';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "36px",
   },
+  input: {
+    display: 'none',
+  },
 }));
 
 function TeachertProfile(props) {
-  
   const classes = useStyles();
   const additionals = useSelector((state) => state.Additionals);
   const dispatch = useDispatch();
+  const [eventImage, setEventImage] = useState(null);
+
+  useEffect(() => {
+    setEventImage(props.image)
+  }, [props])
 
   const removeAdditionalById = async (id) => {
     dispatch(removeAdditional(id));
@@ -34,15 +43,36 @@ function TeachertProfile(props) {
     });
   };
 
+  const getImage = async (e) => {
+    setEventImage(e.target.files[0]);
+    changePhoto(e.target.files[0])
+  }
+
   const signOut = () => {
     AuthService.removeTokenUser();
     props.history.push("/auth");
     window.location.reload(false);
   };
 
+  const changePhoto = (photo) => {
+    const formData = new FormData();
+    formData.append('file', photo);
+    formData.append('teacherId', props.studentId);
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+    axios.put('http://localhost:3333/api/user/changephoto/', formData, config)
+      .then(res => {
+        setEventImage(res.data.image)
+      })
+  }
+
   return (
     <div className={styles.profileContent}>
       <Paper elevation={3} className={`${classes.root} ${styles.userInfo}`}>
+        <div className={styles.userPhoto} style={eventImage ? { background: `url(/uploads/${eventImage}) no-repeat center center / cover` } : { display: 'none' }}></div>
         <div className={styles.userGroupInfo}>
           <p>Фамилия</p>
           <h3>{props.secondName}</h3>
@@ -59,6 +89,18 @@ function TeachertProfile(props) {
           <Button variant="contained" color="secondary" onClick={signOut}>
             Выйти
           </Button>
+          <input
+            accept="image/*"
+            className={classes.input}
+            id="icon-button-file"
+            type="file"
+            onChange={getImage}
+          />
+          <label htmlFor="icon-button-file">
+            <IconButton color="inherit" aria-label="upload picture" component="span">
+              <PhotoCamera />
+            </IconButton>
+          </label>
         </div>
       </Paper>
       <Paper elevation={3} className={`${classes.root} ${styles.subjectList}`}>
@@ -68,7 +110,7 @@ function TeachertProfile(props) {
             return <p key={subject._id}>{subject.name}</p>;
           })}
         </div>
-        <ChangeSubjectList subjects={props.subjects} subjectList={props.subjectList} teacherInfo={props.teacherInfo}/>
+        <ChangeSubjectList subjects={props.subjects} subjectList={props.subjectList} teacherInfo={props.teacherInfo} />
       </Paper>
       <div className={styles.additionalsContainer}>
         <AddAdditionalForm subjects={props.subjects} />

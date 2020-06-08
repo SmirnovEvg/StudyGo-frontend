@@ -26,6 +26,7 @@ function Profile(props) {
   const [subjectList, setSubjectList] = useState([]);
   const [studentId, setStudentId] = useState("");
   const [teacherInfo, setTeacherInfo] = useState({})
+  const [image, setImage] = useState('')
 
   const dispatch = useDispatch();
 
@@ -40,8 +41,6 @@ function Profile(props) {
             Authorization: token,
           },
         });
-        console.log(res.data);
-        
 
         const subjectList = await axios.get(
           "http://localhost:3333/api/subject", {}
@@ -60,8 +59,8 @@ function Profile(props) {
             setGroup(res.data.group);
             setGroupPart(res.data.groupPart);
             break;
-
           case 1:
+            setStudentId(res.data.id)
             setStudnumber(user.studnumber);
             setRole(user.role);
             setFirstName(user.firstName);
@@ -73,8 +72,10 @@ function Profile(props) {
             setSubject(res.data.subjects);
             setTeacherInfo(user.userId);
             dispatch(getAdditionals(res.data.additionals));
+            setImage(res.data.image);
             break;
           case 2:
+            setStudentId(res.data.id)
             setStudnumber(user.studnumber);
             setRole(user.role);
             setFirstName(user.firstName);
@@ -85,9 +86,9 @@ function Profile(props) {
             setAdditional(res.data.additionals);
             setSubject(res.data.subjects);
             setTeacherInfo(user.userId);
+            setImage(res.data.image);
             dispatch(getAdditionals(res.data.additionals));
             break;
-
           default:
             break;
         }
@@ -104,6 +105,7 @@ function Profile(props) {
     <div>
       {role ? (
         <TeacherProfile
+          studentId={studentId}
           studnumber={studnumber}
           role={role}
           firstName={firstName}
@@ -115,6 +117,7 @@ function Profile(props) {
           subjects={subjects}
           subjectList={subjectList}
           teacherInfo={teacherInfo}
+          image={image}
         />
       ) : (
           <StudentProfile

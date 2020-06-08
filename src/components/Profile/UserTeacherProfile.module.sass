@@ -9,6 +9,7 @@
     flex-direction: column
     order: 2
     flex-basis: 30%
+    position: relative
     & p
         font-size: 15px
         font-weight: 100
@@ -20,6 +21,15 @@
         font-size: 25px
         font-weight: 700
         margin: 0
+
+.userPhoto
+    width: 150px
+    height: 150px
+    border-radius: 50%
+    border: 1px solid #707070
+    top: 36px
+    right: 36px
+    position: absolute
 
 .subjectList
     order: 1
@@ -147,6 +157,10 @@
             padding: 7px 0
             font-size: 17px
 
+    .userPhoto
+        width: 100px
+        height: 100px
+
 @media (max-width: 1200px)
     .userInfo
         & p
@@ -218,6 +232,10 @@
     .subjectList
         flex-basis: 48%
 
+    .userPhoto
+        width: 70px
+        height: 70px
+
 @media (max-width: 800px)
     .userInfo
         order: 1
@@ -275,6 +293,10 @@
                     padding: 4px 8px
                     margin-top: 10px
 
+    .userPhoto
+        width: 150px
+        height: 150px
+
 @media (max-width: 764px)
     .additional
         &List
@@ -329,6 +351,19 @@
         & p
             padding: 7px 0
             font-size: 17px
+
+    .userPhoto
+        width: 100px
+        height: 100px
+
+@media (max-width: 500px)
+    .userPhoto
+        width: 200px
+        height: 200px
+        position: relative
+        margin: 0 auto 10px auto
+        top: 0
+        right: 0
 
 @media (max-width: 440px)
     .userInfo

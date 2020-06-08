@@ -14,6 +14,7 @@ import ImportTimetable from "./ImportTimetable";
 import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from "@material-ui/core/styles";
 import _ from 'lodash';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const style = theme => ({
   formControl: {
@@ -39,8 +40,21 @@ class Timetable extends Component {
       course: '',
       group: '',
       groupPart: '',
+      tooltipDisplay: false,
     };
   }
+
+  handleClose = () => {
+    this.setState({
+      tooltipDisplay: false
+    })
+  };
+
+  handleOpen = () => {
+    this.setState({
+      tooltipDisplay: true
+    })
+  };
 
   componentDidMount = async () => {
     const token = AuthService.getToken();
@@ -51,7 +65,7 @@ class Timetable extends Component {
       },
     });
 
-    this.setState({userInfo:user.data});
+    this.setState({ userInfo: user.data });
 
     if (user.data.userId.role === 0) {
       const res = await axios.get("http://localhost:3333/api/timetable/", {
@@ -72,7 +86,7 @@ class Timetable extends Component {
           res.data.filter((item) => item.week === 2).length &&
           res.data.filter((item) => item.week === 2)[0].dayOfTheWeek,
       });
-    } else{
+    } else {
       const res = await axios.get(
         "http://localhost:3333/api/timetable/teacher",
         {
@@ -95,22 +109,22 @@ class Timetable extends Component {
     }
 
     const teacherList = await axios.get(
-      "http://localhost:3333/api/user/teachers/",{}
-      );
-      this.setState({
-        teachers: teacherList.data
-      })
+      "http://localhost:3333/api/user/teachers/", {}
+    );
+    this.setState({
+      teachers: teacherList.data
+    })
 
     const subjectList = await axios.get(
-      "http://localhost:3333/api/subject",{}
-      );
-      this.setState({
-        subjects: subjectList.data
-      })
+      "http://localhost:3333/api/subject", {}
+    );
+    this.setState({
+      subjects: subjectList.data
+    })
   };
 
   componentDidUpdate = async () => {
-    if (this.state.course && this.state.group && this.state.groupPart) {      
+    if (this.state.course && this.state.group && this.state.groupPart) {
       const res = await axios.get("http://localhost:3333/api/timetable/", {
         params: {
           course: this.state.course,
@@ -119,20 +133,20 @@ class Timetable extends Component {
         },
       });
 
-      if(res.data.length && 
-      res.data.filter((item) => item.week === 1).length && 
-      _.isEqual(res.data.filter((item) => item.week === 1)[0].dayOfTheWeek, this.state.secondWeek) === false &&
-      _.isEqual(res.data.filter((item) => item.week === 2)[0].dayOfTheWeek, this.state.secondWeek) === false){
+      if (res.data.length &&
+        res.data.filter((item) => item.week === 1).length &&
+        _.isEqual(res.data.filter((item) => item.week === 1)[0].dayOfTheWeek, this.state.secondWeek) === false &&
+        _.isEqual(res.data.filter((item) => item.week === 2)[0].dayOfTheWeek, this.state.secondWeek) === false) {
         this.setState({
-        firstWeek:
-          res.data &&
-          res.data.filter((item) => item.week === 1).length &&
-          res.data.filter((item) => item.week === 1)[0].dayOfTheWeek,
-        secondWeek:
-          res.data.length &&
-          res.data.filter((item) => item.week === 2).length &&
-          res.data.filter((item) => item.week === 2)[0].dayOfTheWeek,
-      });
+          firstWeek:
+            res.data &&
+            res.data.filter((item) => item.week === 1).length &&
+            res.data.filter((item) => item.week === 1)[0].dayOfTheWeek,
+          secondWeek:
+            res.data.length &&
+            res.data.filter((item) => item.week === 2).length &&
+            res.data.filter((item) => item.week === 2)[0].dayOfTheWeek,
+        });
       }
     }
     else {
@@ -143,12 +157,12 @@ class Timetable extends Component {
             teacher: this.state.userInfo.userId._id,
           },
         }
-      );      
+      );
 
-      if(res.data.length && 
-      res.data.filter((item) => item.week === 1).length && 
-      _.isEqual(res.data.filter((item) => item.week === 1)[0].dayOfTheWeek, this.state.secondWeek) === false &&
-      _.isEqual(res.data.filter((item) => item.week === 2)[0].dayOfTheWeek, this.state.secondWeek) === false){
+      if (res.data.length &&
+        res.data.filter((item) => item.week === 1).length &&
+        _.isEqual(res.data.filter((item) => item.week === 1)[0].dayOfTheWeek, this.state.secondWeek) === false &&
+        _.isEqual(res.data.filter((item) => item.week === 2)[0].dayOfTheWeek, this.state.secondWeek) === false) {
         this.setState({
           firstWeek:
             res.data &&
@@ -168,16 +182,23 @@ class Timetable extends Component {
   };
 
   render() {
-    const { userInfo, weekNumber, firstWeek, secondWeek, teachers, subjects, course, groupPart, group } = this.state;
+    const { userInfo, weekNumber, firstWeek, secondWeek, teachers, subjects, course, groupPart, group, tooltipDisplay } = this.state;
     const { classes } = this.props;
 
     return (
       <div className={styles.timetableContainer}>
         <div className={styles.timetableOptions}>
           <div className={styles.timetableWeek}>
-            <div className={styles.timetableWeekIcon}>
-              {weekNumber === '1' ? 'I' : 'II'}
-            </div>
+            <Tooltip
+              open={tooltipDisplay}
+              onClose={this.handleClose}
+              onOpen={this.handleOpen}
+              title="Номер недели"
+            >
+              <div className={styles.timetableWeekIcon}>
+                {weekNumber === '1' ? 'I' : 'II'}
+              </div>
+            </Tooltip>
             <Radio
               checked={weekNumber === "1"}
               onChange={this.handleChange("weekNumber")}
@@ -254,14 +275,14 @@ class Timetable extends Component {
             </div>
           </div>
         </div>
-          <div className={styles.timetable}>
-            {weekNumber === "1" ? (
-              <WeekTimetable week={firstWeek} teachers={teachers} subjects={subjects}/>
-            ) : (
-              <WeekTimetable week={secondWeek} teachers={teachers} subjects={subjects}/>
+        <div className={styles.timetable}>
+          {weekNumber === "1" ? (
+            <WeekTimetable week={firstWeek} teachers={teachers} subjects={subjects} />
+          ) : (
+              <WeekTimetable week={secondWeek} teachers={teachers} subjects={subjects} />
             )}
-          </div>
-        
+        </div>
+
       </div>
     );
   }

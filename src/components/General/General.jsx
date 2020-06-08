@@ -6,13 +6,29 @@ import Lesson from './Lesson';
 import Event from './Event';
 import styles from './General.module.sass';
 import userIsAuthenticatedRedirect from "../wrappers/userIsAuthenticatedRedirect";
+import dateFormat from 'dateformat';
+
 
 const General = () => {
+    dateFormat.i18n = {
+        dayNames: [
+            'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+            'Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'
+        ],
+        monthNames: [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+            'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+        ],
+        timeNames: [
+            'a', 'p', 'am', 'pm', 'A', 'P', 'AM', 'PM'
+        ]
+    };
     const [lessons, setLessons] = useState([]);
     const [news, setNews] = useState([]);
     const [user, setUser] = useState({});
     const dateNow = new Date(Date.now()).getDay();
     const weekNow = TimetableService.getWeekNumber().toString();
+
     useEffect(() => {
         const getUser = async () => {
             try {
@@ -51,7 +67,7 @@ const General = () => {
 
                 const events = await axios.get('http://localhost:3333/api/event');
                 console.log(events);
-                
+
                 setNews(events.data.slice(0, 3))
             } catch (error) {
                 console.log(error);
@@ -59,10 +75,10 @@ const General = () => {
         };
         getUser();
     }, [dateNow, weekNow]);
-    const dayOfTheWeek = TimetableService.getFullDayOfTheWeek(dateNow)
     return (
         <div className={styles.generalPage}>
-            <h2>{dayOfTheWeek}</h2>
+
+            <h2>{dateFormat(new Date(), "fullDate")}</h2>
             <div className={styles.timetableContainer}>
                 {lessons.map((lesson) => {
                     return (

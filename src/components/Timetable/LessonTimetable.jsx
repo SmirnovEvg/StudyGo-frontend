@@ -21,6 +21,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AuthService from "../../services/AuthService";
 import TimetableService from "../../services/TimetableService";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -33,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LessonTimetable({ lesson, teachers, subjects }) {
+  console.log(lesson);
+
   const [classroomNumber, setClassroomNumber] = useState("");
   const [hall, setHall] = useState("");
   const [week, setWeek] = useState("");
@@ -47,10 +50,11 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
   const [teacher, setTeacher] = useState("");
   const [subject, setSubject] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [openTooltip, setOpenTooltip] = React.useState(false);
 
   const classes = useStyles();
 
-  const user = AuthService.getUser();  
+  const user = AuthService.getUser();
 
   useEffect(() => {
     setClassroomNumber(lesson.classroomNumber);
@@ -141,7 +145,7 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
 
   const handleDelete = (chipToDelete) => async () => {
     console.log(chipToDelete);
-    
+
     setGroup((chips) => chips.filter((chip) => chip !== chipToDelete));
     groups.length > 1 && setgroupPart("");
   };
@@ -152,6 +156,14 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
 
   const handleOpen = () => {
     setOpen(true);
+  };
+
+  const handleCloseTooltip = () => {
+    setOpenTooltip(false);
+  };
+
+  const handleOpenTooltip = () => {
+    setOpenTooltip(true);
   };
 
   const removeLesson = () => {
@@ -179,34 +191,39 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
 
   return (
     <>
-    <Paper elevation={3} className={styles.lesson} onClick={() => handleOpen()}>
-      <div className={styles.lessonMainInfoHeader}>
-        <h6>{lesson.subject.name}</h6>
-      </div>
-      <div>
-        <div className={styles.lessonMainInfo}>
-          <p>{`${lesson.teacher.secondName} ${lesson.teacher.firstName[0]}. ${lesson.teacher.thirdName[0]}.`}</p>
-          <p>{TimetableService.getFullClassTime(lesson.classTime)}</p>
+      <Paper elevation={3} className={styles.lesson} onClick={() => handleOpen()}>
+        <div className={styles.lessonMainInfoHeader}>
+          <Tooltip
+            open={openTooltip}
+            onClose={handleCloseTooltip}
+            onOpen={handleOpenTooltip}
+            title={lesson.subject.name}
+          >
+            <h6>{lesson.subject.name}</h6>
+          </Tooltip>
         </div>
-        <div className={styles.lessonBricks}>
-          <div className={`${styles.lessonType} ${getLessonTypeClass(lesson.type)}`}>{TimetableService.getFullLessonType(lesson.type)}</div>
-          <div className={styles.lessonClassroom}>{lesson.classroomNumber}-{lesson.hall}</div>
-          {!user.role && lesson.additional && <div className={styles.lessonAdd}>Доп</div>}
-          <div className={styles.lessonGroup}>
-            {user.role ? ( 
+        <div>
+          <div className={styles.lessonMainInfo}>
+            <p>{`${lesson.teacher.secondName} ${lesson.teacher.firstName[0]}. ${lesson.teacher.thirdName[0]}.`}</p>
+            <p>{TimetableService.getFullClassTime(lesson.classTime)}</p>
+          </div>
+          <div className={styles.lessonBricks}>
+            <div className={`${styles.lessonType} ${getLessonTypeClass(lesson.type)}`}>{TimetableService.getFullLessonType(lesson.type)}</div>
+            <div className={styles.lessonClassroom}>{lesson.classroomNumber}-{lesson.hall}</div>
+            {!user.role && lesson.additional && <div className={styles.lessonAdd}>Доп</div>}
+            {user.role ? (
               lesson.group.map((group, index) => {
-              return (
-                <div key={index} >
-                  {group}
-                </div>
-              );
-            })): (
-              <></>
-            )}
+                return (
+                  <div key={index} className={styles.lessonGroup}>
+                    {`${group}${groupPart ? `/${groupPart}` : ''}`}
+                  </div>
+                );
+              })) : (
+                <></>
+              )}
           </div>
         </div>
-      </div>
-    </Paper>
+      </Paper>
       {user.role === 2 && <div className="lesson__edit-form">
         <Dialog
           open={open}
@@ -436,7 +453,7 @@ export default function LessonTimetable({ lesson, teachers, subjects }) {
           </ValidatorForm>
         </Dialog>
       </div>}
-      </>
+    </>
   );
 }
 

@@ -106,7 +106,7 @@ export default function EventPage(props) {
                     onSubmit={() => editEvent()}
                     onError={(errors) => console.log(errors)}
                 >
-                    <DialogContent>
+                    <DialogContent style={{display: 'flex', flexDirection: 'column'}}>
                         <TextValidator
                             id="standard-name"
                             label="Название"
@@ -126,6 +126,7 @@ export default function EventPage(props) {
                             rows={6}
                             validators={['required']}
                             errorMessages={['Это поле обязательно']}
+                            style={{width: '500px'}}
                         />
                         <Button variant="contained" color="primary" component="label">
                             Загрузить файл
