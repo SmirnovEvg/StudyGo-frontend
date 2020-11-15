@@ -10,7 +10,7 @@ import StudentProfile from "./StudentProfile";
 import TeacherProfile from "./TeacherProfile";
 import { withRouter } from "react-router";
 
-function Profile(props) {
+function Profile() {
   const [studnumber, setStudnumber] = useState("");
   const [firstName, setFirstName] = useState("");
   const [secondName, setSecondName] = useState("");
@@ -130,6 +130,7 @@ function Profile(props) {
             course={course}
             group={group}
             groupPart={groupPart}
+
           />
         )}
     </div>

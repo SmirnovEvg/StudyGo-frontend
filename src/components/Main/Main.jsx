@@ -22,6 +22,7 @@ const Main = (props) => {
         .then((res) => {
           setMessages(res.data.length);
         });
+
     }
   }, [user]);
   return (
